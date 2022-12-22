@@ -1,0 +1,13 @@
+overwrite: true
+schema: "http://localhost:8080/api/query"
+documents: "src/documents/graphql.ts"
+generates:
+  src/gql/:
+    preset: "client"
+    plugins: []
+  ./graphql.schema.json:
+    plugins:
+      - "introspection"
+hooks:
+  afterAllFileWrite:
+    - prettier --write

@@ -1,0 +1,27 @@
+.module {
+  width: 200px;
+  border: 0.2em solid;
+  margin-right: 10px;
+  ul {
+    list-style: inside;
+  }
+  padding: 5px;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 0.7em;
+}
+
+.price {
+  font-size: 0.6em;
+  border-bottom: 0.2em solid;
+}
+
+.contentTitle {
+  font-size: 0.5em;
+}
+
+.content {
+  font-size: 0.4em;
+}
