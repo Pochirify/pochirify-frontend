@@ -26,4 +26,3 @@ export default function CustomApp({ Component, pageProps }: AppProps) {
     </MediaQueryProvider>
   );
 }
-// TODO: footerをかいてから、modalをためす
