@@ -3,6 +3,7 @@ import Image from "next/image";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import MobileTemplate from "components/templates/variantGroupDetail/MobileTemplate";
+import PcTemplate from "components/templates/variantGroupDetail/PcTemplate";
 import {
   AllActiveVariantGroupIdDocument,
   AllActiveVariantGroupIdQuery,
@@ -18,8 +19,7 @@ const Page = ({ data }: { data: VariantGroupDetailQuery }) => {
   return (
     <>
       {isMobileSite && <MobileTemplate data={data} />}
-      {/* {isPcSite && <MobileTemplate data={data} />} */}
-      {/* {isPcSite && <PcTemplate />} */}
+      {isPcSite && <PcTemplate data={data} />}
     </>
   );
 };

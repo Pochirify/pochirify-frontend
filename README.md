@@ -1,10 +1,21 @@
-- pochirify-backend
+## pochirify-backend
+
 ```
 make up
 ```
 
-- pochirify-frontend
+## pochirify-frontend
+
+- dev
+
 ```
 yarn install
-yarn run dev
+yarn dev
+```
+
+- prod
+
+```
+yarn build
+yarn start
 ```

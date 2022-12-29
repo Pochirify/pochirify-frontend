@@ -5,7 +5,7 @@ import React from "react";
 import styles from "./style.module.scss";
 
 // TODO: marginをつける。開いてる時に背後をうすくする。
-const ModalContainerBase: React.FC = () => {
+export const ModalContainerBase: React.FC = () => {
   const { isShow, renderComponent } = useModalState();
   return (
     <TransitionStyle>
@@ -18,7 +18,7 @@ const ModalContainerBase: React.FC = () => {
   );
 };
 
-export const ModalContainer = React.memo(ModalContainerBase);
+export const MobileModalContainer = React.memo(ModalContainerBase);
 
 // CSSTransitionによるclass命名規則を守るため、scssではなくstyled-componentsを使用している
 const TransitionStyle = styled.div`

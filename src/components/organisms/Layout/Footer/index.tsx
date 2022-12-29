@@ -6,12 +6,15 @@ import { BarImage } from "components/atoms/BarImage";
 import { getPaymentMethodAssetPath } from "utils/paymentMethodAssets";
 import Image from "next/image";
 import { usePaymentMethodModal } from "components/organisms/PaymentMethodModal/usePaymentMethodModal";
+import { useMediaQueryContext } from "providers/MediaQueryProvider";
 
 export const Footer = () => {
   const { totalPrice, selectingPaymentMethod } = usePaymentState();
   const paymentMethodModal = usePaymentMethodModal();
+  const { isMobileSite } = useMediaQueryContext();
+  const moduleWidth = isMobileSite ? "100%" : "50%";
   return (
-    <footer className={styles.module}>
+    <footer className={styles.module} style={{ width: moduleWidth }}>
       <div className={styles.totalPrice}>
         <Typography tag="span" size="10">
           合計
