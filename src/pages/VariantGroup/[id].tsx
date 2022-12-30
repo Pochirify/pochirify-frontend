@@ -1,9 +1,7 @@
-import { useQuery, gql } from "@apollo/client";
-import Image from "next/image";
 import { GetStaticPaths, GetStaticProps } from "next";
-import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
-import MobileTemplate from "components/templates/variantGroupDetail/MobileTemplate";
-import PcTemplate from "components/templates/variantGroupDetail/PcTemplate";
+import { ApolloClient, InMemoryCache } from "@apollo/client";
+import MobileTemplate from "components/templates/VariantGroup/MobileTemplate";
+import PcTemplate from "components/templates/VariantGroup/PcTemplate";
 import {
   AllActiveVariantGroupIdDocument,
   AllActiveVariantGroupIdQuery,

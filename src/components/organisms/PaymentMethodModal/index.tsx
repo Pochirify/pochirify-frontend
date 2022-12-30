@@ -5,7 +5,7 @@ import {
   usePaymentState,
   usePaymentAction,
 } from "providers/PaymentStateProvider";
-import { getPaymentMethodAssetPathsExcept } from "utils/paymentMethodAssets";
+import { getPaymentMethodAssetPathsExcept } from "utils/payment/paymentMethodAssets";
 import { Grid } from "@mui/material";
 
 type Props = {};

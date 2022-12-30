@@ -13,9 +13,10 @@ import styles from "./style.module.scss";
 
 type Props = {
   data: VariantGroupDetailQuery;
+  isMobile: boolean;
 };
 
-export default function Template({ data }: Props) {
+export default function VariantGroupDetail({ data, isMobile }: Props) {
   const [touchedIndex, setTouchedIndex] = useState(0);
   const [selectingCounts, setSelectingCounts] = useState<number[]>(
     data.variantGroupDetail.variants.map(() => 0)
@@ -48,7 +49,9 @@ export default function Template({ data }: Props) {
         {data.variantGroupDetail.variantGroup.title}
       </Typography>
       <BarImage src={data.variantGroupDetail.variantGroup.badgeImageURL} />
-      <Images imageURLs={data.variantGroupDetail.variantGroup.imageURLs} />
+      {isMobile && (
+        <Images imageURLs={data.variantGroupDetail.variantGroup.imageURLs} />
+      )}
       <DeliveryDetail
         deliveryTimeFrom={
           data.variantGroupDetail.variantGroup.deliveryTimeRange.from
@@ -62,10 +65,6 @@ export default function Template({ data }: Props) {
         variantProducts={data.variantGroupDetail.variants}
         onProductClick={setTouchedIndex}
       />
-      {/* TODO: useEffectで定義した方がレンダリング早い。
-      stateが更新されるたびに全部がレンダリングされるが、useEffectはレンダリング前に値を更新することで、
-      レンダリング回数を減らすことができる。使わないと、レンダリングで他の値が更新されるたびにまたレンダリングされて、
-      一回でいいのに連続でレンダリングしてしまいそう*/}
       <SelectingCountSetter
         selectingCount={selectingCounts[touchedIndex]}
         productTitle={data.variantGroupDetail.variants[touchedIndex].title}
