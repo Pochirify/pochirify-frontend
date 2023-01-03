@@ -1,4 +1,6 @@
 import "../styles/globals.css";
+import Head from "next/head";
+import Script from "next/script";
 import type { AppProps } from "next/app";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { MediaQueryProvider } from "../providers/MediaQueryProvider";

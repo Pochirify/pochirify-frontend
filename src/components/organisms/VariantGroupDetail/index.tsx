@@ -10,6 +10,7 @@ import { ReturnPolicy } from "components/molecules/ReturnPolicy/ReturnPolicy";
 import { Typography } from "components/atoms/Typography";
 import { usePaymentAction } from "providers/PaymentStateProvider";
 import styles from "./style.module.scss";
+import { Grid } from "@mui/material";
 
 type Props = {
   data: VariantGroupDetailQuery;

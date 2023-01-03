@@ -9,9 +9,9 @@ import React, {
 } from "react";
 import styles from "./style.module.scss";
 
-function arrayFilled<T>(array: Array<T>) {
+function arrayFilled(array: Array<string>) {
   for (let i = 0; i < array.length; i++) {
-    if (array[i] == undefined) {
+    if (array[i] === undefined || array[i] === "") {
       return false;
     }
   }
@@ -27,22 +27,31 @@ function newCode(beforeCode: string[], newElemIndex: number, newElem: string) {
   });
 }
 
-function isHyphenNeeded(i: number) {
-  return i == 2 || i == 6;
+function toString(code: string[]) {
+  let value = "";
+  for (let i = 0; i < code.length; i++) {
+    value += code[i];
+  }
+  return value;
+}
+
+function isHyphenNeeded(i: number, length: 7 | 11) {
+  return i == 2 || (i == 6 && length == 11);
 }
 
 type Props = {
-  onComplete: () => void;
+  length: 7 | 11;
+  onComplete: (value: string) => void;
   setValue: (value: string) => void;
 };
 
-export const PhoneNumberInput = (props: Props) => {
+export const WithHyphenInput = (props: Props) => {
   const [code, setCode] = useState(() => {
-    return new Array<string>(11).fill("");
+    return new Array<string>(props.length).fill("");
   });
   const [inputIndex, setInputIndex] = useState(0);
   const inputRefs = useRef<RefObject<HTMLInputElement>[]>([]);
-  for (let i = 0; i < 11; i++) {
+  for (let i = 0; i < props.length; i++) {
     inputRefs.current[i] = createRef<HTMLInputElement>();
   }
 
@@ -65,16 +74,12 @@ export const PhoneNumberInput = (props: Props) => {
 
   const setValue = props.setValue;
   useEffect(() => {
-    let value = "";
-    for (let i = 0; i < code.length; i++) {
-      value += code[i];
-    }
-    setValue(value);
+    setValue(toString(code));
   }, [code, setValue]);
 
   return (
     <div className={styles.module}>
-      {[...Array(11)].map((_, i) => (
+      {[...Array(props.length)].map((_, i) => (
         <>
           <input
             className={styles.input}
@@ -88,15 +93,18 @@ export const PhoneNumberInput = (props: Props) => {
               const updated = newCode(code, inputIndex, e.target.value);
               setCode([...updated]);
               if (e.target.value !== "") {
-                i < 10 && inputRefs.current[i + 1].current?.focus();
+                i < props.length - 1 &&
+                  inputRefs.current[i + 1].current?.focus();
                 setInputIndex(inputIndex + 1);
               }
               if (arrayFilled(updated)) {
-                props.onComplete();
+                props.onComplete(toString(updated));
               }
             }}
           />
-          {isHyphenNeeded(i) && <Typography tag="span">-</Typography>}
+          {isHyphenNeeded(i, props.length) && (
+            <Typography tag="span">-</Typography>
+          )}
         </>
       ))}
     </div>
