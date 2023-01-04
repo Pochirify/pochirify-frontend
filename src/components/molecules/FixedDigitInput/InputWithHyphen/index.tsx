@@ -43,9 +43,10 @@ type Props = {
   length: 7 | 11;
   onComplete: (value: string) => void;
   setValue: (value: string) => void;
+  onBlur?: () => void;
 };
 
-export const WithHyphenInput = (props: Props) => {
+export const InputWithHyphen = (props: Props) => {
   const [code, setCode] = useState(() => {
     return new Array<string>(props.length).fill("");
   });
@@ -65,12 +66,17 @@ export const WithHyphenInput = (props: Props) => {
     [inputIndex]
   );
 
-  useEffect(() => {
+  const addKeyDownListener = useCallback(() => {
     document.addEventListener("keydown", bsFunction, false);
-    return () => {
-      document.removeEventListener("keydown", bsFunction, false);
-    };
   }, [bsFunction]);
+  const removeKeyDownListener = useCallback(() => {
+    document.removeEventListener("keydown", bsFunction, false);
+  }, [bsFunction]);
+
+  useEffect(() => {
+    addKeyDownListener();
+    return removeKeyDownListener;
+  }, [bsFunction, addKeyDownListener, removeKeyDownListener]);
 
   const setValue = props.setValue;
   useEffect(() => {
@@ -81,7 +87,9 @@ export const WithHyphenInput = (props: Props) => {
     <div className={styles.module}>
       {[...Array(props.length)].map((_, i) => (
         <>
+          {/* TODO: idが被らないように工夫 */}
           <input
+            id={i.toString()}
             className={styles.input}
             maxLength={1}
             key={i}
@@ -100,6 +108,14 @@ export const WithHyphenInput = (props: Props) => {
               if (arrayFilled(updated)) {
                 props.onComplete(toString(updated));
               }
+            }}
+            onFocus={() => {
+              setInputIndex(i + 1);
+              addKeyDownListener();
+            }}
+            onBlur={() => {
+              // focusしてない時はkeydownをlistenしない
+              removeKeyDownListener();
             }}
           />
           {isHyphenNeeded(i, props.length) && (

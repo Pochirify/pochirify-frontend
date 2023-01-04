@@ -1,0 +1,14 @@
+.module {
+  display: inline-block;
+  width: max-content;
+  max-width: 100%;
+
+  input {
+    border: 0.1em solid;
+    width: 100%;
+  }
+}
+
+.bottom {
+  color: red;
+}

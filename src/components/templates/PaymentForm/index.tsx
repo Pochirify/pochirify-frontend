@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { SixDigitInput } from "components/molecules/FixedDigitInput/SixDigitInput";
-import { WithHyphenInput } from "components/molecules/FixedDigitInput/WithHyphenInput";
+import { InputWithHyphen } from "components/molecules/FixedDigitInput/InputWithHyphen";
 import { usePaymentState } from "providers/PaymentStateProvider";
 import { Typography } from "components/atoms/Typography";
 import { payWithCard } from "utils/payment/fincode";
@@ -9,7 +9,7 @@ import { FormContainer } from "components/molecules/FormContainer";
 import Script from "next/script";
 import { AddressForm } from "components/organisms/AddressForm";
 import styles from "./style.module.scss";
-import { TextField } from "components/atoms/TextField";
+import { TextField } from "components/molecules/TextField";
 
 // payWithCodeと住所自動入力に必要
 const Scripts = () => {
@@ -39,7 +39,7 @@ const Template = () => {
         iconImageURL="/Payment/PaymentForm/telePhone.png"
         title="電話番号"
       >
-        <WithHyphenInput
+        <InputWithHyphen
           length={11}
           onComplete={() => {
             console.log("sfds");

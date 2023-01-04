@@ -3,8 +3,7 @@ import * as yup from "yup";
 
 export const addressFormResolver = yupResolver(
   yup.object().shape({
-    address1: yup.string().min(1),
-    address2: yup.string().min(1),
+    address2: yup.string().min(1, "入力してください").max(10, "ddddd"),
     address3: yup.string().min(1),
   })
 );

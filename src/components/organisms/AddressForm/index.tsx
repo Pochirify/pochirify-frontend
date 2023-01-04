@@ -3,8 +3,9 @@ import { Grid } from "@mui/material";
 import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import { addressFormResolver } from "utils/resolvers/addressForm";
-import { WithHyphenInput } from "components/molecules/FixedDigitInput/WithHyphenInput";
-import { TextField } from "components/atoms/TextField";
+import { InputWithHyphen } from "components/molecules/FixedDigitInput/InputWithHyphen";
+import { TextField } from "components/molecules/TextField";
+import { useEffect } from "react";
 
 type Address = {
   zipCode: string;
@@ -21,6 +22,8 @@ export const AddressForm = () => {
     register,
     handleSubmit,
     setValue,
+    trigger,
+    getValues,
     formState: { isValid, errors },
   } = useForm<Address>({
     resolver: addressFormResolver,
@@ -32,6 +35,9 @@ export const AddressForm = () => {
       address4: "",
     },
   });
+  useEffect(() => {
+    console.log(isValid);
+  }, [isValid]);
   const fillAddress = async (value: string) => {
     // setZipcodeMain({ ...zipcode, sub: e.target.value });
     // setValue("zipCode", e.target.value)
@@ -83,10 +89,11 @@ export const AddressForm = () => {
           <Typography tag="span">郵便番号：</Typography>
         </Grid>
         <Grid item xs={6}>
-          <WithHyphenInput
+          <InputWithHyphen
             length={7}
             onComplete={fillAddress}
             setValue={setZipCode}
+            // onBlur={setZip}
           />
         </Grid>
       </Grid>
@@ -109,7 +116,13 @@ export const AddressForm = () => {
             control={control}
             name="address2"
             defaultValue=""
-            render={({ field }) => <TextField {...field} width={"50%"} />}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                width={"50%"}
+                error={errors.address2?.message}
+              />
+            )}
           />
         </Grid>
       </Grid>
@@ -139,6 +152,7 @@ export const AddressForm = () => {
           />
         </Grid>
       </Grid>
+      <input type="submit" onClick={() => trigger()} />
     </>
   );
 };
