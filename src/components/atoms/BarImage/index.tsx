@@ -5,6 +5,7 @@ type Props = {
   src: string;
   // alt: string;
   height?: number;
+  onClick?: () => void;
 };
 // ____________________________________________________________
 //
@@ -16,7 +17,13 @@ export const BarImage = (props: Props) => {
   }
   return (
     <div style={{ position: "relative", width: "100%", height: height }}>
-      <Image src={props.src} layout="fill" objectFit="contain" alt="image" />
+      <Image
+        src={props.src}
+        layout="fill"
+        objectFit="contain"
+        alt="image"
+        onClick={props.onClick}
+      />
     </div>
   );
 };

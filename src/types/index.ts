@@ -1,4 +1,4 @@
-export type PaymentMethod = "googlePay" | "paypay";
+export type PaymentMethod = "googlePay" | "paypay" | "card";
 
 export type FincodePaymentForm = {
   orderID: string;

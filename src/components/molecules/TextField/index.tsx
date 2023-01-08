@@ -4,24 +4,28 @@ import { mergeClassName } from "utils/string";
 
 type Props = React.ComponentProps<"input"> & {
   className?: string;
+  number?: boolean;
   // bottom shows if both of bottom and error gotten
-  bottom?: string;
+  // bottom?: string;
   error?: string;
 };
 
+// TODO: refじゃなくてよい
 export const TextField = React.forwardRef<HTMLInputElement, Props>(
-  function TextFiled({ className, bottom, error, ...props }) {
+  // TODO: nameタグもとっていれるべき？
+  function TextFiled({ className, error, ...props }) {
     return (
-      <div className={mergeClassName(styles.module, className)}>
+      <span className={mergeClassName(styles.module, className)}>
         <input {...props} />
-        {(bottom || error) && (
+        {error && <span className={styles.error}>{error}</span>}
+        {/* {(bottom || error) && (
           <div className={styles.bottom}>
             {!bottom && <span>{error}</span>}
             {!error && <span>{bottom}</span>}
             {error && bottom && <span>{bottom}</span>}
           </div>
-        )}
-      </div>
+        )} */}
+      </span>
     );
   }
 );

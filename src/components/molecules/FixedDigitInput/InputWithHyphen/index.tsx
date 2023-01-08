@@ -6,6 +6,7 @@ import React, {
   useCallback,
   RefObject,
   createRef,
+  ChangeEventHandler,
 } from "react";
 import styles from "./style.module.scss";
 
@@ -41,7 +42,7 @@ function isHyphenNeeded(i: number, length: 7 | 11) {
 
 type Props = {
   length: 7 | 11;
-  onComplete: (value: string) => void;
+  onComplete?: (value: string) => void;
   setValue: (value: string) => void;
   onBlur?: () => void;
 };
@@ -59,7 +60,7 @@ export const InputWithHyphen = (props: Props) => {
   const bsFunction = useCallback(
     (event: any) => {
       if (event.key === "Backspace" && inputIndex > 0) {
-        inputRefs.current[inputIndex - 1].current?.focus();
+        inputRefs.current[inputIndex - 1]?.current?.focus();
         setInputIndex(inputIndex - 1);
       }
     },
@@ -90,27 +91,26 @@ export const InputWithHyphen = (props: Props) => {
           {/* TODO: idが被らないように工夫 */}
           <input
             id={i.toString()}
-            className={styles.input}
             maxLength={1}
             key={i}
             autoFocus={i === 0}
             value={code[i]}
-            type="tel"
+            type="number"
             ref={inputRefs.current[i]}
             onChange={(e) => {
               const updated = newCode(code, inputIndex, e.target.value);
               setCode([...updated]);
               if (e.target.value !== "") {
                 i < props.length - 1 &&
-                  inputRefs.current[i + 1].current?.focus();
+                  inputRefs.current[i + 1]?.current?.focus();
                 setInputIndex(inputIndex + 1);
               }
-              if (arrayFilled(updated)) {
+              if (props.onComplete && arrayFilled(updated)) {
                 props.onComplete(toString(updated));
               }
             }}
             onFocus={() => {
-              setInputIndex(i + 1);
+              setInputIndex(i);
               addKeyDownListener();
             }}
             onBlur={() => {

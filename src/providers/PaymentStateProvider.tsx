@@ -13,7 +13,7 @@ type State = {
 const defaultState: State = {
   totalPrice: 0,
   selectingPaymentMethod: "paypay",
-  availablePaymentMethods: ["googlePay", "paypay"],
+  availablePaymentMethods: ["googlePay", "paypay", "card"],
 };
 const PaymentStateContext = React.createContext(defaultState);
 const PaymentStateActionContext = React.createContext({

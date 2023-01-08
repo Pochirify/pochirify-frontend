@@ -4,14 +4,17 @@ export function getPaymentMethodAssetPath(paymentMethod: PaymentMethod) {
   return "/Payment/" + paymentMethod + ".png";
 }
 
-export function getPaymentMethodAssetPathsExcept(except: PaymentMethod) {
-  const paths = [];
+export function getPaymentMethodsExcept(except: PaymentMethod) {
+  const methods: PaymentMethod[] = [];
   if (except !== "googlePay") {
-    paths.push(getPaymentMethodAssetPath("googlePay"));
+    methods.push("googlePay");
   }
   if (except !== "paypay") {
-    paths.push(getPaymentMethodAssetPath("paypay"));
+    methods.push("paypay");
+  }
+  if (except !== "card") {
+    methods.push("card");
   }
 
-  return paths;
+  return methods;
 }
