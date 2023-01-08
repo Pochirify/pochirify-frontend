@@ -46,45 +46,61 @@ export default function VariantGroupDetail({ data, isMobile }: Props) {
 
   return (
     <>
-      <Typography tag="h3" bold alignCenter>
-        {data.variantGroupDetail.variantGroup.title}
-      </Typography>
+      <Grid sx={{ mt: 3 }}>
+        <Typography tag="h3" bold alignCenter>
+          {data.variantGroupDetail.variantGroup.title}
+        </Typography>
+      </Grid>
       <BarImage src={data.variantGroupDetail.variantGroup.badgeImageURL} />
       {isMobile && (
         <Images imageURLs={data.variantGroupDetail.variantGroup.imageURLs} />
       )}
-      <DeliveryDetail
-        deliveryTimeFrom={
-          data.variantGroupDetail.variantGroup.deliveryTimeRange.from
-        }
-        deliveryTimeTo={
-          data.variantGroupDetail.variantGroup.deliveryTimeRange.to
-        }
-      />
-      <ReturnPolicy />
-      <ProductsSlider
-        variantProducts={data.variantGroupDetail.variants}
-        onProductClick={setTouchedIndex}
-      />
-      <SelectingCountSetter
-        selectingCount={selectingCounts[touchedIndex]}
-        productTitle={data.variantGroupDetail.variants[touchedIndex].title}
-        price={data.variantGroupDetail.variants[touchedIndex].price}
-        onChange={updateSelectingCount}
-      />
+      <Grid sx={{ mt: 1 }}>
+        <DeliveryDetail
+          deliveryTimeFrom={
+            data.variantGroupDetail.variantGroup.deliveryTimeRange.from
+          }
+          deliveryTimeTo={
+            data.variantGroupDetail.variantGroup.deliveryTimeRange.to
+          }
+        />
+      </Grid>
+      <Grid sx={{ mt: 1 }}>
+        <ReturnPolicy />
+      </Grid>
+      <Grid sx={{ mt: 1 }}>
+        <ProductsSlider
+          variantProducts={data.variantGroupDetail.variants}
+          onProductClick={setTouchedIndex}
+        />
+      </Grid>
+      <Grid sx={{ mt: 1 }}>
+        <SelectingCountSetter
+          selectingCount={selectingCounts[touchedIndex]}
+          productTitle={data.variantGroupDetail.variants[touchedIndex].title}
+          price={data.variantGroupDetail.variants[touchedIndex].price}
+          onChange={updateSelectingCount}
+        />
+      </Grid>
       {/* TODO: 普通のnext/imageのImageでいい */}
-      <WebpPngImage
-        webpImageURL={data.variantGroupDetail.variantGroup.faqImageURL.webpURL}
-        pngImageURL={data.variantGroupDetail.variantGroup.faqImageURL.pngURL}
-      />
-      <WebpPngImage
-        webpImageURL={
-          data.variantGroupDetail.variantGroup.descriptionImageURL.webpURL
-        }
-        pngImageURL={
-          data.variantGroupDetail.variantGroup.descriptionImageURL.pngURL
-        }
-      />
+      <Grid sx={{ mt: 3 }}>
+        <WebpPngImage
+          webpImageURL={
+            data.variantGroupDetail.variantGroup.faqImageURL.webpURL
+          }
+          pngImageURL={data.variantGroupDetail.variantGroup.faqImageURL.pngURL}
+        />
+      </Grid>
+      <Grid sx={{ mt: 3 }}>
+        <WebpPngImage
+          webpImageURL={
+            data.variantGroupDetail.variantGroup.descriptionImageURL.webpURL
+          }
+          pngImageURL={
+            data.variantGroupDetail.variantGroup.descriptionImageURL.pngURL
+          }
+        />
+      </Grid>
       <Typography className={styles.space}></Typography>
     </>
   );

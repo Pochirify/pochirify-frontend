@@ -1,43 +1,5 @@
 .module {
   position: fixed;
   bottom: 0;
-  z-index: 5;
-  height: 90px;
-  // width: 100%;
-  background-color: white;
-}
-
-.totalPrice {
-  height: 30px;
-  display: flex;
-  // 垂直方向中央
-  align-items: center;
-  // 右よせ
-  justify-content: flex-end;
-}
-
-// TODO: flexでレスポンシブにする
-.paymentBar {
-  height: 60px;
-  text-align: center;
-}
-
-.paymentButton {
-  display: inline-block;
-  border: 0.01em solid;
-  width: 255px;
-  height: 60px;
-}
-
-.paymentButtonText {
-  display: inline-block;
-  vertical-align: middle;
-  height: 60px;
-}
-
-// 本当は%で指定して、padding-top: 100%?を使って正方形にするのがいいかも
-.paymentMethodSelectButton {
-  width: 50px;
-  display: inline-block;
-  height: 30px;
+  // background-color: white;
 }
