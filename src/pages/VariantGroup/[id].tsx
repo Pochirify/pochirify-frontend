@@ -64,8 +64,11 @@ export default Page;
 // }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
+  if (process.env.NEXT_PUBLIC_BACKEND_URL === undefined) {
+    throw new Error("process.env.NEXT_PUBLIC_BACKEND_URL is undefined");
+  }
   const client = new ApolloClient({
-    uri: "http://localhost:8080/api/query",
+    uri: process.env.NEXT_PUBLIC_BACKEND_URL,
     cache: new InMemoryCache(),
   });
 
@@ -87,8 +90,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
+  if (process.env.NEXT_PUBLIC_BACKEND_URL === undefined) {
+    throw new Error("process.env.NEXT_PUBLIC_BACKEND_URL is undefined");
+  }
   const client = new ApolloClient({
-    uri: "http://localhost:8080/api/query",
+    uri: process.env.NEXT_PUBLIC_BACKEND_URL,
     cache: new InMemoryCache(),
   });
 
