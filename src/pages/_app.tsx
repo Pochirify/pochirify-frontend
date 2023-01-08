@@ -8,8 +8,11 @@ import { ModalProvider } from "providers/ModalProvider";
 import { PaymentStateProvider } from "providers/PaymentStateProvider";
 import { Layout } from "components/organisms/Layout";
 
+if (process.env.NEXT_PUBLIC_BACKEND_URL === undefined) {
+  throw new Error("process.env.NEXT_PUBLIC_BACKEND_URL is undefined");
+}
 const apolloClient = new ApolloClient({
-  uri: "http://localhost:8080/api/query",
+  uri: process.env.NEXT_PUBLIC_BACKEND_URL,
   cache: new InMemoryCache(),
 });
 
