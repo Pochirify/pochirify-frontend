@@ -5,16 +5,21 @@ import {
   usePaymentState,
   usePaymentAction,
 } from "providers/PaymentStateProvider";
-import { getPaymentMethodAssetPathsExcept } from "utils/payment/paymentMethodAssets";
+import {
+  getPaymentMethodsExcept,
+  getPaymentMethodAssetPath,
+} from "utils/payment/paymentMethodAssets";
 import { Grid } from "@mui/material";
+import { PaymentMethod } from "types";
 
 type Props = {};
 
 export const PaymentMethodModal = (props: Props) => {
   const { totalPrice, selectingPaymentMethod } = usePaymentState();
+  const { setSelectingPaymentMethod } = usePaymentAction();
   const { hideModal } = useModalAction();
 
-  const paths = getPaymentMethodAssetPathsExcept(selectingPaymentMethod);
+  const methods = getPaymentMethodsExcept(selectingPaymentMethod);
   return (
     <div>
       <Grid container>
@@ -38,8 +43,18 @@ export const PaymentMethodModal = (props: Props) => {
           </button>
         </Grid>
       </Grid>
-      {paths.map((path) => {
-        return <BarImage key={path} src={path} height={60} />;
+      {methods.map((method) => {
+        return (
+          <BarImage
+            key={method}
+            src={getPaymentMethodAssetPath(method)}
+            height={60}
+            onClick={() => {
+              setSelectingPaymentMethod(method);
+              hideModal();
+            }}
+          />
+        );
       })}
     </div>
   );
