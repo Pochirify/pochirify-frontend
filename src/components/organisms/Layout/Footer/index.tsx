@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import { Typography } from "components/atoms/Typography";
 import { usePaymentState } from "providers/PaymentStateProvider";
 import styles from "./style.module.scss";
@@ -6,12 +7,23 @@ import { getPaymentMethodAssetPath } from "utils/payment/paymentMethodAssets";
 import { usePaymentMethodModal } from "components/organisms/PaymentMethodModal/usePaymentMethodModal";
 import { useMediaQueryContext } from "providers/MediaQueryProvider";
 import { Box } from "@mui/system";
+import { useRouter } from "next/router";
 
 export const Footer = () => {
-  const { totalPrice, selectingPaymentMethod } = usePaymentState();
+  const { totalPrice, paymentReadied, selectingPaymentMethod } =
+    usePaymentState();
+  const router = useRouter();
   const paymentMethodModal = usePaymentMethodModal();
   const { isMobileSite } = useMediaQueryContext();
   const moduleWidth = isMobileSite ? "100%" : "50%";
+
+  const [active, setActive] = React.useState(true);
+  useEffect(() => {
+    const active = paymentReadied || router.pathname !== "/PaymentForm";
+    setActive(active);
+    // console.log(!paymentReadied && router.pathname === "/PaymentForm");
+  }, [paymentReadied, router]);
+
   return (
     <Grid container style={{ width: moduleWidth }} className={styles.module}>
       <Box
@@ -53,7 +65,9 @@ export const Footer = () => {
                     xs={10}
                     justifyContent="center"
                     alignItems="center"
+                    style={{ opacity: active ? undefined : 0.3 }}
                   >
+                    {/* {cover && <div className={styles.cover}></div>} */}
                     <img
                       src={getPaymentMethodAssetPath(selectingPaymentMethod)}
                       alt=""

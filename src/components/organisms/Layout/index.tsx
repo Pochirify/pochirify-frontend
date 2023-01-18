@@ -25,6 +25,8 @@ export const Layout = ({ children }: Props) => {
         <Grid container>
           <Grid item xs={6}></Grid>
           <Grid item xs={6}>
+            {/* TODO: 変更 */}
+            <div style={{ height: "190px" }}></div>
             <Footer />
           </Grid>
         </Grid>

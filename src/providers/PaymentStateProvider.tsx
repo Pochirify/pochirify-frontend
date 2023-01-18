@@ -6,21 +6,25 @@ type Props = {
 };
 type State = {
   totalPrice: number;
+  paymentReadied: boolean;
   selectingPaymentMethod: PaymentMethod;
   availablePaymentMethods: PaymentMethod[];
 };
 
 const defaultState: State = {
   totalPrice: 0,
+  paymentReadied: false,
   selectingPaymentMethod: "paypay",
   availablePaymentMethods: ["googlePay", "paypay", "card"],
 };
 const PaymentStateContext = React.createContext(defaultState);
 const PaymentStateActionContext = React.createContext({
   setTotalPrice: () => {},
+  setPaymentReadied: () => {},
   setSelectingPaymentMethod: () => {},
 } as {
   setTotalPrice: (totalPrice: number) => void;
+  setPaymentReadied: (paymentReadied: boolean) => void;
   setSelectingPaymentMethod: (method: PaymentMethod) => void;
 });
 // ____________________________________________________________
@@ -30,6 +34,9 @@ export const PaymentStateProvider: FC<Props> = ({ children }: Props) => {
 
   const setTotalPrice = React.useCallback((totalPrice: number) => {
     setState((prev) => ({ ...prev, totalPrice: totalPrice }));
+  }, []);
+  const setPaymentReadied = React.useCallback((paymentReadied: boolean) => {
+    setState((prev) => ({ ...prev, paymentReadied: paymentReadied }));
   }, []);
   const setSelectingPaymentMethod = React.useCallback(
     (method: PaymentMethod) => {
@@ -41,7 +48,7 @@ export const PaymentStateProvider: FC<Props> = ({ children }: Props) => {
   return (
     <PaymentStateContext.Provider value={state}>
       <PaymentStateActionContext.Provider
-        value={{ setTotalPrice, setSelectingPaymentMethod }}
+        value={{ setTotalPrice, setPaymentReadied, setSelectingPaymentMethod }}
       >
         {children}
       </PaymentStateActionContext.Provider>
