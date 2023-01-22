@@ -65,11 +65,30 @@ const VARIANT_GROUP_DETAIL = gql`
     }
   }
 `;
+
 // TODO: 複数形にする
 const ALL_ACTIVE_VARIANT_GROUP_ID = gql`
   query allActiveVariantGroupID {
     allActiveVariantGroupIDs {
       ids
+    }
+  }
+`;
+
+const CREATE_ORDER = gql`
+  mutation createOrder($input: createOrderInput!) {
+    createOrder(input: $input) {
+      orderID
+      totalPrice
+      orderResult {
+        ... on paypayOrderResult {
+          url
+        }
+        ... on creditCardResult {
+          cardOrderID
+          accessID
+        }
+      }
     }
   }
 `;

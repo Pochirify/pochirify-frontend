@@ -18,15 +18,6 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  EmailAddress: any;
-  PhoneNumber: any;
-};
-
-export type AddressInput = {
-  addressOne: Scalars["String"];
-  addressTwo?: InputMaybe<Scalars["String"]>;
-  prefecture: Scalars["String"];
-  zip: Scalars["String"];
 };
 
 export type AllActiveVariantGroupIDs = {
@@ -42,40 +33,19 @@ export type DeliveryTimeRange = {
 
 export type Mutation = {
   __typename?: "Mutation";
-  createPaypayQRCode: CreatePaypayQrCodePayload;
-  createTodo: Todo;
-  createUser: User;
+  createOrder: CreateOrderPayload;
 };
 
-export type MutationCreatePaypayQrCodeArgs = {
-  input: PaypayQrCodeInput;
+export type MutationCreateOrderArgs = {
+  input: CreateOrderInput;
 };
 
-export type MutationCreateTodoArgs = {
-  input: NewTodo;
-};
-
-export type MutationCreateUserArgs = {
-  input: NewUser;
-};
-
-export type NewTodo = {
-  text: Scalars["String"];
-  userId: Scalars["String"];
-};
-
-export type NewUser = {
-  id?: InputMaybe<Scalars["ID"]>;
-  name: Scalars["String"];
-};
-
-export type PaypayQrCodeInput = {
-  address: AddressInput;
-  amount: Scalars["Int"];
-  emailAddress: Scalars["EmailAddress"];
-  orderDescription: Scalars["String"];
-  phoneNumber: Scalars["PhoneNumber"];
-};
+export enum PaymentMethod {
+  ApplePay = "APPLE_PAY",
+  Card = "CARD",
+  GooglePay = "GOOGLE_PAY",
+  Paypay = "PAYPAY",
+}
 
 export type Product = {
   __typename?: "Product";
@@ -89,28 +59,11 @@ export type Product = {
 export type Query = {
   __typename?: "Query";
   allActiveVariantGroupIDs: AllActiveVariantGroupIDs;
-  todos: Array<Todo>;
-  users: Array<User>;
   variantGroupDetail: VariantGroupDetail;
 };
 
 export type QueryVariantGroupDetailArgs = {
   id: Scalars["String"];
-};
-
-export type Todo = {
-  __typename?: "Todo";
-  done: Scalars["Boolean"];
-  id: Scalars["ID"];
-  text: Scalars["String"];
-  user: User;
-};
-
-export type User = {
-  __typename?: "User";
-  id: Scalars["ID"];
-  name: Scalars["String"];
-  todo?: Maybe<Todo>;
 };
 
 export type VariantGroup = {
@@ -136,9 +89,40 @@ export type WebpPngImageUrl = {
   webpURL: Scalars["String"];
 };
 
-export type CreatePaypayQrCodePayload = {
-  __typename?: "createPaypayQRCodePayload";
-  deepLink: Scalars["String"];
+export type CreateOrderInput = {
+  addressID?: InputMaybe<Scalars["String"]>;
+  building?: InputMaybe<Scalars["String"]>;
+  city: Scalars["String"];
+  emailAddress: Scalars["String"];
+  firstName: Scalars["String"];
+  lastName: Scalars["String"];
+  paymentMethod: PaymentMethod;
+  phoneNumber: Scalars["String"];
+  prefecture: Scalars["String"];
+  productID: Scalars["String"];
+  quantity: Scalars["Int"];
+  streetAddress: Scalars["String"];
+  userID?: InputMaybe<Scalars["String"]>;
+  zipCode: Scalars["Int"];
+};
+
+export type CreateOrderPayload = {
+  __typename?: "createOrderPayload";
+  orderID: Scalars["String"];
+  orderResult: OrderResult;
+  totalPrice: Scalars["Int"];
+};
+
+export type CreditCardResult = {
+  __typename?: "creditCardResult";
+  accessID: Scalars["String"];
+  cardOrderID: Scalars["String"];
+};
+
+export type OrderResult = CreditCardResult | PaypayOrderResult;
+
+export type PaypayOrderResult = {
+  __typename?: "paypayOrderResult";
   url: Scalars["String"];
 };
 
@@ -192,6 +176,26 @@ export type AllActiveVariantGroupIdQuery = {
   allActiveVariantGroupIDs: {
     __typename?: "AllActiveVariantGroupIDs";
     ids: Array<string>;
+  };
+};
+
+export type CreateOrderMutationVariables = Exact<{
+  input: CreateOrderInput;
+}>;
+
+export type CreateOrderMutation = {
+  __typename?: "Mutation";
+  createOrder: {
+    __typename?: "createOrderPayload";
+    orderID: string;
+    totalPrice: number;
+    orderResult:
+      | {
+          __typename?: "creditCardResult";
+          cardOrderID: string;
+          accessID: string;
+        }
+      | { __typename?: "paypayOrderResult"; url: string };
   };
 };
 
@@ -365,3 +369,100 @@ export const AllActiveVariantGroupIdDocument = {
   AllActiveVariantGroupIdQuery,
   AllActiveVariantGroupIdQueryVariables
 >;
+export const CreateOrderDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "createOrder" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "createOrderInput" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "createOrder" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "orderID" } },
+                { kind: "Field", name: { kind: "Name", value: "totalPrice" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "orderResult" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "InlineFragment",
+                        typeCondition: {
+                          kind: "NamedType",
+                          name: { kind: "Name", value: "paypayOrderResult" },
+                        },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "url" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "InlineFragment",
+                        typeCondition: {
+                          kind: "NamedType",
+                          name: { kind: "Name", value: "creditCardResult" },
+                        },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "cardOrderID" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "accessID" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<CreateOrderMutation, CreateOrderMutationVariables>;

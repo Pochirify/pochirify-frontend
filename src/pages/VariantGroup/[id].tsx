@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import MobileTemplate from "components/templates/VariantGroup/MobileTemplate";
@@ -9,9 +10,14 @@ import {
   VariantGroupDetailDocument,
   VariantGroupDetailQuery,
 } from "../../gql/graphql";
+import { usePaymentAction } from "providers/PaymentStateProvider";
 import { useMediaQueryContext } from "../../providers/MediaQueryProvider";
 
 const Page = ({ data }: { data: VariantGroupDetailQuery }) => {
+  const { setShowFooter } = usePaymentAction();
+  useEffect(() => {
+    setShowFooter(true);
+  }, []);
   const { isMobileSite, isPcSite } = useMediaQueryContext();
 
   return (

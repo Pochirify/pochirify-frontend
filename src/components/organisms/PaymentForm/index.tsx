@@ -17,8 +17,14 @@ import { useForm, Controller, FieldErrors } from "react-hook-form";
 import { paymentFormResolver } from "utils/resolver";
 import { CardForm } from "components/organisms/PaymentForm/CardForm";
 import { GraphicalShow } from "components/atoms/GraphicalShow/GraphicalShow";
-import { useRouter } from "next/router";
 import { useCard } from "./useCard";
+import {
+  MutationFunctionOptions,
+  DefaultContext,
+  ApolloCache,
+  FetchResult,
+} from "@apollo/client";
+import { CreateOrderMutation, CreateOrderInput, Exact } from "gql/graphql";
 
 export type Form = {
   phoneNumber: string;
@@ -26,9 +32,9 @@ export type Form = {
   zipCode: string;
   prefecture: string;
   // TODO: フィールド名わかりずらい
-  address2: string;
-  address3: string;
-  address4?: string;
+  city: string;
+  streetAddress: string;
+  building?: string;
   lastName: string;
   firstName: string;
 };
@@ -42,7 +48,22 @@ export type Form = {
 //   securityCode: "644",
 // };
 
-type Props = {};
+type Props = {
+  productID: string;
+  quantity: number;
+  createOrder: (
+    options?:
+      | MutationFunctionOptions<
+          CreateOrderMutation,
+          Exact<{
+            input: CreateOrderInput;
+          }>,
+          DefaultContext,
+          ApolloCache<any>
+        >
+      | undefined
+  ) => Promise<FetchResult<CreateOrderMutation>>;
+};
 
 export const PaymentForm = (props: Props) => {
   const {
@@ -70,15 +91,33 @@ export const PaymentForm = (props: Props) => {
   const [showCardForm, setShowCardForm] = useState(
     selectingPaymentMethod === "card"
   );
+
+  // props.createOrder({
+  //   variables: {
+  //     input: {
+  //       productID: "",
+  //       quantity: 0,
+  //       paymentMethod: PaymentMethod.Card,
+  //       phoneNumber: "",
+  //       emailAddress: "",
+  //       zipCode: 3424,
+  //       prefecture: "",
+  //       city: "",
+  //       streetAddress: "",
+  //       lastName: "",
+  //       firstName: "",
+  //     },
+  //   },
+  // }).catch((e) => {});
   useEffect(() => {
     setShowCardForm(selectingPaymentMethod === "card");
-  }, [selectingPaymentMethod, setValue]);
+  }, [selectingPaymentMethod]);
 
   const setPhoneNumber = (value: string) => {
     setValue("phoneNumber", value);
   };
 
-  const { setPaymentReadied } = usePaymentAction();
+  const { setPaymentReadied, setOnClick } = usePaymentAction();
   useEffect(() => {
     let readied: boolean;
     if (selectingPaymentMethod === "card") {
@@ -89,6 +128,15 @@ export const PaymentForm = (props: Props) => {
     setPaymentReadied(readied);
   }, [isValid, cardIsValid, selectingPaymentMethod, setPaymentReadied]);
 
+  // const router = useRouter();
+  // router.push({
+  //   pathname: "/",
+  //   query: {
+  //     name: "",
+  //     f: "fdf",
+  //   },
+  // });
+
   return (
     <div className={styles.module}>
       <Typography size={"14"}>合計{totalPrice}円（税込・送料込み）</Typography>
@@ -96,7 +144,11 @@ export const PaymentForm = (props: Props) => {
         iconImageURL="/Payment/PaymentForm/telePhone.png"
         title="電話番号"
       >
-        <InputWithHyphen length={11} setValue={setPhoneNumber} />
+        <InputWithHyphen
+          length={11}
+          setValue={setPhoneNumber}
+          autoFocus={true}
+        />
       </FormContainer>
       <FormContainer
         iconImageURL="/Payment/PaymentForm/mail.png"

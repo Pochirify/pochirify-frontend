@@ -11,6 +11,7 @@ import { Typography } from "components/atoms/Typography";
 import { usePaymentAction } from "providers/PaymentStateProvider";
 import styles from "./style.module.scss";
 import { Grid } from "@mui/material";
+import { useRouter } from "next/router";
 
 type Props = {
   data: VariantGroupDetailQuery;
@@ -23,7 +24,7 @@ export default function VariantGroupDetail({ data, isMobile }: Props) {
     data.variantGroupDetail.variants.map(() => 0)
   );
 
-  const { setTotalPrice } = usePaymentAction();
+  const { setTotalPrice, setOnClick } = usePaymentAction();
   useEffect(() => {
     setTotalPrice(
       selectingCounts[touchedIndex] *
@@ -35,6 +36,20 @@ export default function VariantGroupDetail({ data, isMobile }: Props) {
     data.variantGroupDetail.variants,
     setTotalPrice,
   ]);
+
+  const router = useRouter();
+  useEffect(() => {
+    setOnClick(() => {
+      router.push({
+        pathname: "/Payment",
+        query: {
+          productID: data.variantGroupDetail.variants[touchedIndex].id,
+          quantity: selectingCounts[touchedIndex],
+          variantImageURLs: data.variantGroupDetail.variantGroup.imageURLs,
+        },
+      });
+    });
+  }, [data, touchedIndex, selectingCounts]);
 
   function updateSelectingCount(selectingCount: number) {
     setSelectingCounts((prevCounts: number[]) => {

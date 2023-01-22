@@ -45,6 +45,7 @@ type Props = {
   onComplete?: (value: string) => void;
   setValue: (value: string) => void;
   onBlur?: () => void;
+  autoFocus: boolean;
 };
 
 export const InputWithHyphen = (props: Props) => {
@@ -93,7 +94,7 @@ export const InputWithHyphen = (props: Props) => {
             id={i.toString()}
             maxLength={1}
             key={i}
-            autoFocus={i === 0}
+            autoFocus={props.autoFocus && i === 0}
             value={code[i]}
             type="number"
             ref={inputRefs.current[i]}

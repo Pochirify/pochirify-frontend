@@ -4,3 +4,7 @@
   - キャッシュの動作確認を行うために App.js ファイルに show プロパティを設定し show を true,false と切り替えることで User コンポーネントの表示、非表示(マウント、アンマウント)を切り替えます。
 
 - https://www.ownit.co/checkout/showcase/w4Ncvr6c
+
+- 画像一覧
+- paypay で支払えるようにする
+- card で支払えるようにする
