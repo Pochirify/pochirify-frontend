@@ -1,8 +1,6 @@
 import "react-image-gallery/styles/css/image-gallery.css";
 import ImageGallery from "react-image-gallery";
-import { fallbackHttpConfig } from "@apollo/client";
 import { Card, Grid } from "@mui/material";
-import { border, Box, maxWidth } from "@mui/system";
 
 type Props = {
   imageURLs: string[];
