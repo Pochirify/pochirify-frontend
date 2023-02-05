@@ -10,18 +10,17 @@ import {
 } from "react-hook-form";
 import Cards from "react-credit-cards";
 import "react-credit-cards/es/styles-compiled.css";
-import { Form } from "components/organisms/PaymentForm";
+import { Card } from "components/organisms/PaymentForm/useCard";
 import { TextField } from "components/molecules/TextField";
 import { Grid } from "@mui/material";
 
 type Props = {
-  isShow: boolean;
-  setValue: UseFormSetValue<Form>;
-  trigger: UseFormTrigger<Form>;
-  register: UseFormRegister<Form>;
-  control: Control<Form>;
-  getValues: UseFormGetValues<Form>;
-  errors?: FieldErrors<Form>;
+  setValue: UseFormSetValue<Card>;
+  trigger: UseFormTrigger<Card>;
+  register: UseFormRegister<Card>;
+  control: Control<Card>;
+  getValues: UseFormGetValues<Card>;
+  errors?: FieldErrors<Card>;
 };
 
 export const CardForm = (props: Props) => {

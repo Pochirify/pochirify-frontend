@@ -71,3 +71,25 @@
 //     return newCartInfos;
 //   });
 // }
+
+function getIsFormValid(
+  getValues: (name: string) => string,
+  errors: FieldErrors<Form>
+) {
+  return (
+    getValues("phoneNumber") !== "" &&
+    typeof errors.phoneNumber === "undefined" &&
+    getValues("email") !== "" &&
+    typeof errors.email === "undefined" &&
+    getValues("prefecture") !== "" &&
+    typeof errors.prefecture === "undefined" &&
+    getValues("address2") !== "" &&
+    typeof errors.address2 === "undefined" &&
+    getValues("address3") !== "" &&
+    typeof errors.address3 === "undefined" &&
+    getValues("lastName") !== "" &&
+    typeof errors.lastName === "undefined" &&
+    getValues("firstName") !== "" &&
+    typeof errors.firstName === "undefined"
+  );
+}

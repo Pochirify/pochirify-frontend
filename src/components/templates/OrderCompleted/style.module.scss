@@ -1,0 +1,28 @@
+.module {
+  display: flex;
+  justify-content: center;
+}
+
+.content {
+  width: 400px;
+  height: 40px;
+}
+
+.title {
+  border-bottom: 0.1em solid #eee5e5;
+  color: var(--primary-green);
+  // relativeのやつはwidthとheightを指定する必要がある
+  position: relative;
+  width: 400px;
+  height: 40px;
+  margin-bottom: 20px;
+}
+
+.title_item {
+  position: absolute;
+  bottom: 5px;
+}
+
+.message {
+  margin-bottom: 40px;
+}

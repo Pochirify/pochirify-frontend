@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import { Typography } from "components/atoms/Typography";
 import { usePaymentState } from "providers/PaymentStateProvider";
 import styles from "./style.module.scss";
@@ -6,12 +7,32 @@ import { getPaymentMethodAssetPath } from "utils/payment/paymentMethodAssets";
 import { usePaymentMethodModal } from "components/organisms/PaymentMethodModal/usePaymentMethodModal";
 import { useMediaQueryContext } from "providers/MediaQueryProvider";
 import { Box } from "@mui/system";
+import { useRouter } from "next/router";
 
 export const Footer = () => {
-  const { totalPrice, selectingPaymentMethod } = usePaymentState();
+  const {
+    totalPrice,
+    paymentReadied,
+    showFooter,
+    onClick,
+    selectingPaymentMethod,
+  } = usePaymentState();
+  const router = useRouter();
   const paymentMethodModal = usePaymentMethodModal();
   const { isMobileSite } = useMediaQueryContext();
   const moduleWidth = isMobileSite ? "100%" : "50%";
+
+  const [active, setActive] = React.useState(true);
+  useEffect(() => {
+    const active = paymentReadied || router.pathname !== "/Payment";
+    setActive(active);
+    // console.log(!paymentReadied && router.pathname === "/PaymentForm");
+  }, [paymentReadied, router.pathname]);
+
+  if (!showFooter) {
+    return <></>;
+  }
+
   return (
     <Grid container style={{ width: moduleWidth }} className={styles.module}>
       <Box
@@ -53,19 +74,30 @@ export const Footer = () => {
                     xs={10}
                     justifyContent="center"
                     alignItems="center"
+                    style={{ opacity: active ? undefined : 0.3 }}
                   >
-                    <img
-                      src={getPaymentMethodAssetPath(selectingPaymentMethod)}
-                      alt=""
-                      width="60%"
-                      height="80%"
-                    />
-                    <Typography tag="span" size="10">
-                      でお支払い
-                    </Typography>
+                    <a
+                      role="button"
+                      className={active ? styles.button : undefined}
+                      onClick={active ? onClick : undefined}
+                    >
+                      <img
+                        src={getPaymentMethodAssetPath(selectingPaymentMethod)}
+                        alt=""
+                        width="60%"
+                        height="80%"
+                      />
+                      <Typography tag="span" size="10">
+                        でお支払い
+                      </Typography>
+                    </a>
                   </Grid>
                   <Grid item xs={2}>
-                    <a role="button" {...paymentMethodModal}>
+                    <a
+                      role="button"
+                      {...paymentMethodModal}
+                      className={styles.button}
+                    >
                       {/* 多分画像じゃなくて、文字列で扱うべき */}
                       <img
                         src="/paymentMethodSelectButton.png"

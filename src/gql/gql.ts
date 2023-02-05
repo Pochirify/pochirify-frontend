@@ -17,6 +17,8 @@ const documents = {
     types.VariantGroupDetailDocument,
   "\n  query allActiveVariantGroupID {\n    allActiveVariantGroupIDs {\n      ids\n    }\n  }\n":
     types.AllActiveVariantGroupIdDocument,
+  "\n  mutation createOrder($input: createOrderInput!) {\n    createOrder(input: $input) {\n      orderID\n      totalPrice\n      orderResult {\n        ... on paypayOrderResult {\n          url\n        }\n        ... on creditCardResult {\n          cardOrderID\n          accessID\n        }\n      }\n    }\n  }\n":
+    types.CreateOrderDocument,
 };
 
 /**
@@ -31,6 +33,12 @@ export function graphql(
 export function graphql(
   source: "\n  query allActiveVariantGroupID {\n    allActiveVariantGroupIDs {\n      ids\n    }\n  }\n"
 ): typeof documents["\n  query allActiveVariantGroupID {\n    allActiveVariantGroupIDs {\n      ids\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  mutation createOrder($input: createOrderInput!) {\n    createOrder(input: $input) {\n      orderID\n      totalPrice\n      orderResult {\n        ... on paypayOrderResult {\n          url\n        }\n        ... on creditCardResult {\n          cardOrderID\n          accessID\n        }\n      }\n    }\n  }\n"
+): typeof documents["\n  mutation createOrder($input: createOrderInput!) {\n    createOrder(input: $input) {\n      orderID\n      totalPrice\n      orderResult {\n        ... on paypayOrderResult {\n          url\n        }\n        ... on creditCardResult {\n          cardOrderID\n          accessID\n        }\n      }\n    }\n  }\n"];
 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.

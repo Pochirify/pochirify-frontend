@@ -34,8 +34,8 @@ export const AddressForm = (props: Props) => {
       if (res.data.results) {
         const result = res.data.results[0];
         props.setValue("prefecture", result["address1"]);
-        props.setValue("address2", result["address2"]);
-        props.setValue("address3", result["address3"]);
+        props.setValue("city", result["city"]);
+        props.setValue("streetAddress", result["streetAddress"]);
       }
     } catch {
       console.log("住所の取得に失敗しました。");
@@ -76,6 +76,7 @@ export const AddressForm = (props: Props) => {
             onComplete={fillAddress}
             setValue={setZipCode}
             // onBlur={setZip}
+            autoFocus={false}
           />
         </Grid>
       </Grid>
@@ -96,7 +97,7 @@ export const AddressForm = (props: Props) => {
         <Grid item xs={7}>
           <Controller
             control={props.control}
-            name="address2"
+            name="city"
             defaultValue=""
             render={({ field }) => (
               <TextField {...field} placeholder="市区町村" />
@@ -111,7 +112,7 @@ export const AddressForm = (props: Props) => {
         <Grid item xs={7}>
           <Controller
             control={props.control}
-            name="address3"
+            name="streetAddress"
             defaultValue=""
             render={({ field }) => (
               <TextField placeholder="町・番地" {...field} />
@@ -126,7 +127,7 @@ export const AddressForm = (props: Props) => {
         <Grid item xs={7}>
           <Controller
             control={props.control}
-            name="address4"
+            name="building"
             defaultValue=""
             render={({ field }) => (
               <TextField placeholder="建物名など" {...field} />
