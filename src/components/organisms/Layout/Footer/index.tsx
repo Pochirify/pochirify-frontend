@@ -7,31 +7,19 @@ import { getPaymentMethodAssetPath } from "utils/payment/paymentMethodAssets";
 import { usePaymentMethodModal } from "components/organisms/PaymentMethodModal/usePaymentMethodModal";
 import { useMediaQueryContext } from "providers/MediaQueryProvider";
 import { Box } from "@mui/system";
-import { useRouter } from "next/router";
+import { PaymentMethod } from "types";
 
-export const Footer = () => {
-  const {
-    totalPrice,
-    paymentReadied,
-    showFooter,
-    onClick,
-    selectingPaymentMethod,
-  } = usePaymentState();
-  const router = useRouter();
+type Props = {
+  active: boolean;
+  totalPrice: number;
+  onClick: () => void;
+  selectingPaymentMethod: PaymentMethod;
+};
+
+export const Footer = (props: Props) => {
   const paymentMethodModal = usePaymentMethodModal();
   const { isMobileSite } = useMediaQueryContext();
   const moduleWidth = isMobileSite ? "100%" : "50%";
-
-  const [active, setActive] = React.useState(true);
-  useEffect(() => {
-    const active = paymentReadied || router.pathname !== "/Payment";
-    setActive(active);
-    // console.log(!paymentReadied && router.pathname === "/PaymentForm");
-  }, [paymentReadied, router.pathname]);
-
-  if (!showFooter) {
-    return <></>;
-  }
 
   return (
     <Grid container style={{ width: moduleWidth }} className={styles.module}>
@@ -51,7 +39,7 @@ export const Footer = () => {
                   合計
                 </Typography>
                 <Typography tag="span" size="12" bold>
-                  {totalPrice}
+                  {props.totalPrice}
                 </Typography>
                 <Typography tag="span" size="10">
                   円 (税込・送料込み)　
@@ -74,15 +62,17 @@ export const Footer = () => {
                     xs={10}
                     justifyContent="center"
                     alignItems="center"
-                    style={{ opacity: active ? undefined : 0.3 }}
+                    style={{ opacity: props.active ? undefined : 0.3 }}
                   >
                     <a
                       role="button"
-                      className={active ? styles.button : undefined}
-                      onClick={active ? onClick : undefined}
+                      className={props.active ? styles.button : undefined}
+                      onClick={props.active ? props.onClick : undefined}
                     >
                       <img
-                        src={getPaymentMethodAssetPath(selectingPaymentMethod)}
+                        src={getPaymentMethodAssetPath(
+                          props.selectingPaymentMethod
+                        )}
                         alt=""
                         width="60%"
                         height="80%"

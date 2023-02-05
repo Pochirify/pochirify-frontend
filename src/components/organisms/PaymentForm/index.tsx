@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { SixDigitInput } from "components/molecules/FixedDigitInput/SixDigitInput";
 import { InputWithHyphen } from "components/molecules/FixedDigitInput/InputWithHyphen";
 import {
@@ -25,6 +25,8 @@ import {
   FetchResult,
 } from "@apollo/client";
 import { CreateOrderMutation, CreateOrderInput, Exact } from "gql/graphql";
+import { Footer } from "components/organisms/Layout/Footer";
+import { useRouter } from "next/router";
 
 export type Form = {
   phoneNumber: string;
@@ -50,6 +52,7 @@ export type Form = {
 
 type Props = {
   productID: string;
+  totalPrice: number;
   quantity: number;
   createOrder: (
     options?:
@@ -87,7 +90,7 @@ export const PaymentForm = (props: Props) => {
     cardErrors,
   } = useCard();
 
-  const { totalPrice, selectingPaymentMethod } = usePaymentState();
+  const { selectingPaymentMethod } = usePaymentState();
   const [showCardForm, setShowCardForm] = useState(
     selectingPaymentMethod === "card"
   );
@@ -117,29 +120,29 @@ export const PaymentForm = (props: Props) => {
     setValue("phoneNumber", value);
   };
 
-  const { setPaymentReadied, setOnClick } = usePaymentAction();
+  const [active, setActive] = useState(false);
   useEffect(() => {
-    let readied: boolean;
+    let active: boolean;
     if (selectingPaymentMethod === "card") {
-      readied = isValid && cardIsValid;
+      active = isValid && cardIsValid;
     } else {
-      readied = isValid;
+      active = isValid;
     }
-    setPaymentReadied(readied);
-  }, [isValid, cardIsValid, selectingPaymentMethod, setPaymentReadied]);
+    setActive(active);
+  }, [isValid, cardIsValid, selectingPaymentMethod]);
 
-  // const router = useRouter();
-  // router.push({
-  //   pathname: "/",
-  //   query: {
-  //     name: "",
-  //     f: "fdf",
-  //   },
-  // });
+  const router = useRouter();
+  const onClick = useCallback(() => {
+    router.push({
+      pathname: "/OrderCompleted",
+    });
+  }, []);
 
   return (
     <div className={styles.module}>
-      <Typography size={"14"}>合計{totalPrice}円（税込・送料込み）</Typography>
+      <Typography size={"14"}>
+        合計{props.totalPrice}円（税込・送料込み）
+      </Typography>
       <FormContainer
         iconImageURL="/Payment/PaymentForm/telePhone.png"
         title="電話番号"
@@ -225,6 +228,12 @@ export const PaymentForm = (props: Props) => {
         </FormContainer>
       </GraphicalShow>
       <input type="submit" onClick={() => trigger()} />
+      <Footer
+        totalPrice={props.totalPrice}
+        active={active}
+        onClick={onClick}
+        selectingPaymentMethod={selectingPaymentMethod}
+      />
     </div>
   );
 };

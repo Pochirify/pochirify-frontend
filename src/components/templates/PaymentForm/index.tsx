@@ -41,6 +41,7 @@ const Template = (props: Props) => {
   const [isReady, setIsReady] = useState(false);
 
   const productID = props.router.query.productID as string | undefined;
+  const totalPrice = props.router.query.totalPrice as string | undefined;
   const quantity = props.router.query.quantity as string | undefined;
   const variantImageURLs = props.router.query.variantImageURLs as
     | string[]
@@ -70,10 +71,12 @@ const Template = (props: Props) => {
     return <>loading...</>;
   }
 
+  const totalPriceInt = parseInt(totalPrice as string, 10);
   const quantityInt = parseInt(quantity as string, 10);
   return (
     <div className={styles.module}>
       {/* <button onClick={() => payWithCard(form)}>button</button> */}
+      {/* TODO: responsiveに対応する。 */}
       <Grid container>
         <Grid item xs={6}>
           {variantImageURLs?.map((url, i) => {
@@ -83,6 +86,7 @@ const Template = (props: Props) => {
         <Grid item xs={6}>
           <PaymentForm
             productID={productID as string}
+            totalPrice={totalPriceInt}
             quantity={quantityInt}
             createOrder={createOrder}
           />
