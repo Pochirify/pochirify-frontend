@@ -41,7 +41,7 @@ export default function VariantGroupDetail({ data, isMobile }: Props) {
   useEffect(() => {
     setOnClick(() => {
       router.push({
-        pathname: "/Payment",
+        pathname: "/PaymentForm",
         query: {
           productID: data.variantGroupDetail.variants[touchedIndex].id,
           quantity: selectingCounts[touchedIndex],

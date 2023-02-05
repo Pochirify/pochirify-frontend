@@ -11,10 +11,6 @@ a {
   text-decoration: none;
 }
 
-* {
-  box-sizing: border-box;
-}
-
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
@@ -43,4 +39,8 @@ a {
 
 button {
   border-width: 0;
+}
+
+:root {
+  --primary-green: #34a853;
 }
