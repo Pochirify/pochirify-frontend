@@ -12,7 +12,6 @@ export default function Template({ data }: Props) {
   return (
     <>
       <Grid container>
-        {/* max-width450pxずつくらいにして中央軸によせる */}
         <Grid item xs={6}>
           <Images imageURLs={data.variantGroupDetail.variantGroup.imageURLs} />
         </Grid>

@@ -8,10 +8,10 @@ import { BarImage } from "components/atoms/BarImage";
 import { DeliveryDetail } from "components/molecules/DeliveryDetail/DeliveryDetail";
 import { ReturnPolicy } from "components/molecules/ReturnPolicy/ReturnPolicy";
 import { Typography } from "components/atoms/Typography";
-import { usePaymentAction } from "providers/PaymentStateProvider";
 import styles from "./style.module.scss";
 import { Grid } from "@mui/material";
 import { useRouter } from "next/router";
+import { Footer } from "components/organisms/Layout/Footer";
 
 type Props = {
   data: VariantGroupDetailQuery;
@@ -24,32 +24,28 @@ export default function VariantGroupDetail({ data, isMobile }: Props) {
     data.variantGroupDetail.variants.map(() => 0)
   );
 
-  const { setTotalPrice, setOnClick } = usePaymentAction();
-  useEffect(() => {
-    setTotalPrice(
-      selectingCounts[touchedIndex] *
-        data.variantGroupDetail.variants[touchedIndex].price
-    );
-  }, [
-    touchedIndex,
-    selectingCounts,
-    data.variantGroupDetail.variants,
-    setTotalPrice,
-  ]);
-
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [onClick, setOnClick] = useState({ fn: () => {} });
   const router = useRouter();
   useEffect(() => {
-    setOnClick(() => {
-      router.push({
-        pathname: "/PaymentForm",
-        query: {
-          productID: data.variantGroupDetail.variants[touchedIndex].id,
-          quantity: selectingCounts[touchedIndex],
-          variantImageURLs: data.variantGroupDetail.variantGroup.imageURLs,
-        },
-      });
+    const totalPrice =
+      selectingCounts[touchedIndex] *
+      data.variantGroupDetail.variants[touchedIndex].price;
+    setTotalPrice(totalPrice);
+    setOnClick({
+      fn: () => {
+        router.push({
+          pathname: "/PaymentForm",
+          query: {
+            productID: data.variantGroupDetail.variants[touchedIndex].id,
+            totalPrice: totalPrice,
+            quantity: selectingCounts[touchedIndex],
+            variantImageURLs: data.variantGroupDetail.variantGroup.imageURLs,
+          },
+        });
+      },
     });
-  }, [data, touchedIndex, selectingCounts]);
+  }, [touchedIndex, selectingCounts, data]);
 
   function updateSelectingCount(selectingCount: number) {
     setSelectingCounts((prevCounts: number[]) => {
@@ -117,6 +113,13 @@ export default function VariantGroupDetail({ data, isMobile }: Props) {
         />
       </Grid>
       <Typography className={styles.space}></Typography>
+      {/* TODO: Footerのstyle修正 */}
+      <Footer
+        totalPrice={totalPrice}
+        active={true}
+        onClick={onClick.fn}
+        selectingPaymentMethod="paypay"
+      />
     </>
   );
 }
