@@ -64,6 +64,7 @@ const Template = (props: Props) => {
     }
   }, [props.router.isReady]);
 
+  // TODO: createOrderを投げて、結果を見てpaypayへ移動する。
   const [createOrder, { data, loading, error }] = useMutation<
     CreateOrderMutation,
     CreateOrderMutationVariables

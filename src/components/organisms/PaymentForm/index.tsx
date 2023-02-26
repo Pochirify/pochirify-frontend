@@ -25,7 +25,7 @@ import {
   FetchResult,
 } from "@apollo/client";
 import { CreateOrderMutation, CreateOrderInput, Exact } from "gql/graphql";
-import { Footer } from "components/organisms/Layout/Footer";
+import { Footer } from "components/organisms/Footer";
 import { useRouter } from "next/router";
 
 export type Form = {

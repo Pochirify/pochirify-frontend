@@ -14,7 +14,7 @@ import { Typography } from "components/atoms/Typography";
 import styles from "./style.module.scss";
 import { Grid } from "@mui/material";
 import { useRouter } from "next/router";
-import { Footer } from "components/organisms/Layout/Footer";
+import { Footer } from "components/organisms/Footer";
 import Image from "next/image";
 
 type Props = {
