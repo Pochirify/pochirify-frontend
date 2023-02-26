@@ -1,16 +1,11 @@
 import Template from "components/templates/PaymentForm";
-import { usePaymentAction } from "providers/PaymentStateProvider";
-import { useEffect } from "react";
+import { useMediaQueryContext } from "providers/MediaQueryProvider";
 
 const PaymentForm = () => {
-  const { setShowFooter } = usePaymentAction();
-  useEffect(() => {
-    setShowFooter(true);
-  }, []);
-
+  const { isMobileSite } = useMediaQueryContext();
   return (
     <>
-      <Template />
+      <Template isMobileSite={isMobileSite} />
     </>
   );
 };

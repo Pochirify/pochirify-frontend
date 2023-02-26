@@ -1,17 +1,21 @@
-import { VariantGroupDetailQuery, Product } from "gql/graphql";
+import { VariantGroupDetailQuery, ProductVariant } from "gql/graphql";
 import { useEffect, useReducer, useState } from "react";
 import { ProductsSlider } from "components/molecules/ProductsSlider/ProductsSlider";
 import { SelectingCountSetter } from "components/molecules/SelectingCountSetter/SelectingCountSetter";
-import { WebpPngImage } from "components/atoms/WebpPngImage";
 import { Images } from "components/atoms/Images";
 import { BarImage } from "components/atoms/BarImage";
 import { DeliveryDetail } from "components/molecules/DeliveryDetail/DeliveryDetail";
 import { ReturnPolicy } from "components/molecules/ReturnPolicy/ReturnPolicy";
+import {
+  usePaymentAction,
+  usePaymentState,
+} from "providers/PaymentStateProvider";
 import { Typography } from "components/atoms/Typography";
-import { usePaymentAction } from "providers/PaymentStateProvider";
 import styles from "./style.module.scss";
 import { Grid } from "@mui/material";
 import { useRouter } from "next/router";
+import { Footer } from "components/organisms/Footer";
+import Image from "next/image";
 
 type Props = {
   data: VariantGroupDetailQuery;
@@ -24,32 +28,31 @@ export default function VariantGroupDetail({ data, isMobile }: Props) {
     data.variantGroupDetail.variants.map(() => 0)
   );
 
-  const { setTotalPrice, setOnClick } = usePaymentAction();
+  const totalPrice =
+    selectingCounts[touchedIndex] *
+    data.variantGroupDetail.variants[touchedIndex].unitPrice;
+  const { setTotalPrice } = usePaymentAction();
   useEffect(() => {
-    setTotalPrice(
-      selectingCounts[touchedIndex] *
-        data.variantGroupDetail.variants[touchedIndex].price
-    );
-  }, [
-    touchedIndex,
-    selectingCounts,
-    data.variantGroupDetail.variants,
-    setTotalPrice,
-  ]);
+    setTotalPrice(totalPrice);
+  }, [totalPrice, setTotalPrice]);
 
+  const [onClick, setOnClick] = useState({ fn: () => {} });
   const router = useRouter();
   useEffect(() => {
-    setOnClick(() => {
-      router.push({
-        pathname: "/PaymentForm",
-        query: {
-          productID: data.variantGroupDetail.variants[touchedIndex].id,
-          quantity: selectingCounts[touchedIndex],
-          variantImageURLs: data.variantGroupDetail.variantGroup.imageURLs,
-        },
-      });
+    setOnClick({
+      fn: () => {
+        router.push({
+          pathname: "/PaymentForm",
+          query: {
+            productID: data.variantGroupDetail.variants[touchedIndex].id,
+            totalPrice: totalPrice,
+            quantity: selectingCounts[touchedIndex],
+            variantImageURLs: data.variantGroupDetail.variantGroup.imageURLs,
+          },
+        });
+      },
     });
-  }, [data, touchedIndex, selectingCounts]);
+  }, [touchedIndex, selectingCounts, data, totalPrice]);
 
   function updateSelectingCount(selectingCount: number) {
     setSelectingCounts((prevCounts: number[]) => {
@@ -70,7 +73,7 @@ export default function VariantGroupDetail({ data, isMobile }: Props) {
       {isMobile && (
         <Images imageURLs={data.variantGroupDetail.variantGroup.imageURLs} />
       )}
-      <Grid sx={{ mt: 1 }}>
+      {/* <Grid sx={{ mt: 1 }}>
         <DeliveryDetail
           deliveryTimeFrom={
             data.variantGroupDetail.variantGroup.deliveryTimeRange.from
@@ -82,7 +85,7 @@ export default function VariantGroupDetail({ data, isMobile }: Props) {
       </Grid>
       <Grid sx={{ mt: 1 }}>
         <ReturnPolicy />
-      </Grid>
+      </Grid> */}
       <Grid sx={{ mt: 1 }}>
         <ProductsSlider
           variantProducts={data.variantGroupDetail.variants}
@@ -93,30 +96,32 @@ export default function VariantGroupDetail({ data, isMobile }: Props) {
         <SelectingCountSetter
           selectingCount={selectingCounts[touchedIndex]}
           productTitle={data.variantGroupDetail.variants[touchedIndex].title}
-          price={data.variantGroupDetail.variants[touchedIndex].price}
+          price={data.variantGroupDetail.variants[touchedIndex].unitPrice}
           onChange={updateSelectingCount}
         />
       </Grid>
-      {/* TODO: 普通のnext/imageのImageでいい */}
-      <Grid sx={{ mt: 3 }}>
-        <WebpPngImage
-          webpImageURL={
-            data.variantGroupDetail.variantGroup.faqImageURL.webpURL
-          }
-          pngImageURL={data.variantGroupDetail.variantGroup.faqImageURL.pngURL}
+      <Grid sx={{ mt: 1 }}>
+        <img
+          src={data.variantGroupDetail.variantGroup.descriptionImageURL}
+          width="100%"
+          alt="description"
         />
-      </Grid>
-      <Grid sx={{ mt: 3 }}>
-        <WebpPngImage
+        {/* <WebpPngImage
           webpImageURL={
             data.variantGroupDetail.variantGroup.descriptionImageURL.webpURL
           }
           pngImageURL={
             data.variantGroupDetail.variantGroup.descriptionImageURL.pngURL
           }
-        />
+        /> */}
       </Grid>
       <Typography className={styles.space}></Typography>
+      {/* TODO: Footerのstyle修正 */}
+      <Footer
+        totalPrice={totalPrice}
+        active={totalPrice > 0}
+        onClick={onClick.fn}
+      />
     </>
   );
 }

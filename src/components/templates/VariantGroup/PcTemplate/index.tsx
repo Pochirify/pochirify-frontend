@@ -1,4 +1,4 @@
-import { VariantGroupDetailQuery, Product } from "gql/graphql";
+import { VariantGroupDetailQuery, ProductVariant } from "gql/graphql";
 import { Images } from "components/atoms/Images";
 import { Grid } from "@mui/material";
 import styles from "./style.module.scss";
@@ -12,7 +12,6 @@ export default function Template({ data }: Props) {
   return (
     <>
       <Grid container>
-        {/* max-width450pxずつくらいにして中央軸によせる */}
         <Grid item xs={6}>
           <Images imageURLs={data.variantGroupDetail.variantGroup.imageURLs} />
         </Grid>

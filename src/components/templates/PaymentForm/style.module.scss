@@ -3,3 +3,10 @@
   // justify-content: center;
   // max-width: 500px;
 }
+
+.loading {
+  z-index: 1;
+  position: fixed;
+  margin: auto;
+  inset: 0;
+}

@@ -13,11 +13,11 @@ import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel-plugin for production.
  */
 const documents = {
-  "\n  query variantGroupDetail($id: String!) {\n    variantGroupDetail(id: $id) {\n      variantGroup: variantGroup {\n        id\n        title\n        imageURLs\n        deliveryTimeRange {\n          from\n          to\n        }\n        faqImageURL {\n          webpURL\n          pngURL\n        }\n        descriptionImageURL {\n          webpURL\n          pngURL\n        }\n        badgeImageURL\n      }\n      variants: variants {\n        id\n        title\n        price\n        contents\n        imageURL\n      }\n    }\n  }\n":
+  "\n  query variantGroupDetail($id: String!) {\n    variantGroupDetail(id: $id) {\n      variantGroup: variantGroup {\n        id\n        title\n        imageURLs\n        deliveryTimeRange {\n          from\n          to\n        }\n        faqImageURL\n        descriptionImageURL\n        badgeImageURL\n      }\n      variants: variants {\n        id\n        title\n        unitPrice\n        contents\n        imageURL\n      }\n    }\n  }\n":
     types.VariantGroupDetailDocument,
   "\n  query allActiveVariantGroupID {\n    allActiveVariantGroupIDs {\n      ids\n    }\n  }\n":
     types.AllActiveVariantGroupIdDocument,
-  "\n  mutation createOrder($input: createOrderInput!) {\n    createOrder(input: $input) {\n      orderID\n      totalPrice\n      orderResult {\n        ... on paypayOrderResult {\n          url\n        }\n        ... on creditCardResult {\n          cardOrderID\n          accessID\n        }\n      }\n    }\n  }\n":
+  "\n  mutation createOrder($input: createOrderInput!) {\n    createOrder(input: $input) {\n      order {\n        orderID\n        totalPrice\n        orderResult {\n          ... on paypayOrderResult {\n            url\n          }\n          ... on creditCardResult {\n            cardOrderID\n            accessID\n          }\n        }\n      }\n    }\n  }\n":
     types.CreateOrderDocument,
 };
 
@@ -25,8 +25,8 @@ const documents = {
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query variantGroupDetail($id: String!) {\n    variantGroupDetail(id: $id) {\n      variantGroup: variantGroup {\n        id\n        title\n        imageURLs\n        deliveryTimeRange {\n          from\n          to\n        }\n        faqImageURL {\n          webpURL\n          pngURL\n        }\n        descriptionImageURL {\n          webpURL\n          pngURL\n        }\n        badgeImageURL\n      }\n      variants: variants {\n        id\n        title\n        price\n        contents\n        imageURL\n      }\n    }\n  }\n"
-): typeof documents["\n  query variantGroupDetail($id: String!) {\n    variantGroupDetail(id: $id) {\n      variantGroup: variantGroup {\n        id\n        title\n        imageURLs\n        deliveryTimeRange {\n          from\n          to\n        }\n        faqImageURL {\n          webpURL\n          pngURL\n        }\n        descriptionImageURL {\n          webpURL\n          pngURL\n        }\n        badgeImageURL\n      }\n      variants: variants {\n        id\n        title\n        price\n        contents\n        imageURL\n      }\n    }\n  }\n"];
+  source: "\n  query variantGroupDetail($id: String!) {\n    variantGroupDetail(id: $id) {\n      variantGroup: variantGroup {\n        id\n        title\n        imageURLs\n        deliveryTimeRange {\n          from\n          to\n        }\n        faqImageURL\n        descriptionImageURL\n        badgeImageURL\n      }\n      variants: variants {\n        id\n        title\n        unitPrice\n        contents\n        imageURL\n      }\n    }\n  }\n"
+): typeof documents["\n  query variantGroupDetail($id: String!) {\n    variantGroupDetail(id: $id) {\n      variantGroup: variantGroup {\n        id\n        title\n        imageURLs\n        deliveryTimeRange {\n          from\n          to\n        }\n        faqImageURL\n        descriptionImageURL\n        badgeImageURL\n      }\n      variants: variants {\n        id\n        title\n        unitPrice\n        contents\n        imageURL\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -37,8 +37,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  mutation createOrder($input: createOrderInput!) {\n    createOrder(input: $input) {\n      orderID\n      totalPrice\n      orderResult {\n        ... on paypayOrderResult {\n          url\n        }\n        ... on creditCardResult {\n          cardOrderID\n          accessID\n        }\n      }\n    }\n  }\n"
-): typeof documents["\n  mutation createOrder($input: createOrderInput!) {\n    createOrder(input: $input) {\n      orderID\n      totalPrice\n      orderResult {\n        ... on paypayOrderResult {\n          url\n        }\n        ... on creditCardResult {\n          cardOrderID\n          accessID\n        }\n      }\n    }\n  }\n"];
+  source: "\n  mutation createOrder($input: createOrderInput!) {\n    createOrder(input: $input) {\n      order {\n        orderID\n        totalPrice\n        orderResult {\n          ... on paypayOrderResult {\n            url\n          }\n          ... on creditCardResult {\n            cardOrderID\n            accessID\n          }\n        }\n      }\n    }\n  }\n"
+): typeof documents["\n  mutation createOrder($input: createOrderInput!) {\n    createOrder(input: $input) {\n      order {\n        orderID\n        totalPrice\n        orderResult {\n          ... on paypayOrderResult {\n            url\n          }\n          ... on creditCardResult {\n            cardOrderID\n            accessID\n          }\n        }\n      }\n    }\n  }\n"];
 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.

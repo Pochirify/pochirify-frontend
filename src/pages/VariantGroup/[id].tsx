@@ -10,14 +10,9 @@ import {
   VariantGroupDetailDocument,
   VariantGroupDetailQuery,
 } from "../../gql/graphql";
-import { usePaymentAction } from "providers/PaymentStateProvider";
-import { useMediaQueryContext } from "../../providers/MediaQueryProvider";
+import { useMediaQueryContext } from "providers/MediaQueryProvider";
 
 const Page = ({ data }: { data: VariantGroupDetailQuery }) => {
-  const { setShowFooter } = usePaymentAction();
-  useEffect(() => {
-    setShowFooter(true);
-  }, []);
   const { isMobileSite, isPcSite } = useMediaQueryContext();
 
   return (

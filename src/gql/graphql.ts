@@ -33,7 +33,12 @@ export type DeliveryTimeRange = {
 
 export type Mutation = {
   __typename?: "Mutation";
+  completeOrder: CompleteOrderPayload;
   createOrder: CreateOrderPayload;
+};
+
+export type MutationCompleteOrderArgs = {
+  id: Scalars["String"];
 };
 
 export type MutationCreateOrderArgs = {
@@ -47,13 +52,13 @@ export enum PaymentMethod {
   Paypay = "PAYPAY",
 }
 
-export type Product = {
-  __typename?: "Product";
+export type ProductVariant = {
+  __typename?: "ProductVariant";
   contents: Array<Scalars["String"]>;
-  id: Scalars["ID"];
+  id: Scalars["Int"];
   imageURL: Scalars["String"];
-  price: Scalars["Int"];
   title: Scalars["String"];
+  unitPrice: Scalars["Int"];
 };
 
 export type Query = {
@@ -70,9 +75,9 @@ export type VariantGroup = {
   __typename?: "VariantGroup";
   badgeImageURL: Scalars["String"];
   deliveryTimeRange: DeliveryTimeRange;
-  descriptionImageURL: WebpPngImageUrl;
-  faqImageURL: WebpPngImageUrl;
-  id: Scalars["ID"];
+  descriptionImageURL: Scalars["String"];
+  faqImageURL: Scalars["String"];
+  id: Scalars["String"];
   imageURLs: Array<Scalars["String"]>;
   title: Scalars["String"];
 };
@@ -80,17 +85,16 @@ export type VariantGroup = {
 export type VariantGroupDetail = {
   __typename?: "VariantGroupDetail";
   variantGroup: VariantGroup;
-  variants: Array<Product>;
+  variants: Array<ProductVariant>;
 };
 
-export type WebpPngImageUrl = {
-  __typename?: "WebpPngImageURL";
-  pngURL: Scalars["String"];
-  webpURL: Scalars["String"];
+export type CompleteOrderPayload = {
+  __typename?: "completeOrderPayload";
+  isNotOrderCompleted: Scalars["Boolean"];
+  shopifyActivationURL?: Maybe<Scalars["String"]>;
 };
 
 export type CreateOrderInput = {
-  addressID?: InputMaybe<Scalars["String"]>;
   building?: InputMaybe<Scalars["String"]>;
   city: Scalars["String"];
   emailAddress: Scalars["String"];
@@ -99,15 +103,21 @@ export type CreateOrderInput = {
   paymentMethod: PaymentMethod;
   phoneNumber: Scalars["String"];
   prefecture: Scalars["String"];
-  productID: Scalars["String"];
+  productVariantID: Scalars["Int"];
   quantity: Scalars["Int"];
+  redirectURL?: InputMaybe<Scalars["String"]>;
   streetAddress: Scalars["String"];
-  userID?: InputMaybe<Scalars["String"]>;
+  unitPrice: Scalars["Int"];
   zipCode: Scalars["Int"];
 };
 
 export type CreateOrderPayload = {
   __typename?: "createOrderPayload";
+  order?: Maybe<CreateOrderPayloadOrder>;
+};
+
+export type CreateOrderPayloadOrder = {
+  __typename?: "createOrderPayloadOrder";
   orderID: Scalars["String"];
   orderResult: OrderResult;
   totalPrice: Scalars["Int"];
@@ -139,28 +149,20 @@ export type VariantGroupDetailQuery = {
       id: string;
       title: string;
       imageURLs: Array<string>;
+      faqImageURL: string;
+      descriptionImageURL: string;
       badgeImageURL: string;
       deliveryTimeRange: {
         __typename?: "DeliveryTimeRange";
         from: string;
         to: string;
       };
-      faqImageURL: {
-        __typename?: "WebpPngImageURL";
-        webpURL: string;
-        pngURL: string;
-      };
-      descriptionImageURL: {
-        __typename?: "WebpPngImageURL";
-        webpURL: string;
-        pngURL: string;
-      };
     };
     variants: Array<{
-      __typename?: "Product";
-      id: string;
+      __typename?: "ProductVariant";
+      id: number;
       title: string;
-      price: number;
+      unitPrice: number;
       contents: Array<string>;
       imageURL: string;
     }>;
@@ -187,15 +189,18 @@ export type CreateOrderMutation = {
   __typename?: "Mutation";
   createOrder: {
     __typename?: "createOrderPayload";
-    orderID: string;
-    totalPrice: number;
-    orderResult:
-      | {
-          __typename?: "creditCardResult";
-          cardOrderID: string;
-          accessID: string;
-        }
-      | { __typename?: "paypayOrderResult"; url: string };
+    order?: {
+      __typename?: "createOrderPayloadOrder";
+      orderID: string;
+      totalPrice: number;
+      orderResult:
+        | {
+            __typename?: "creditCardResult";
+            cardOrderID: string;
+            accessID: string;
+          }
+        | { __typename?: "paypayOrderResult"; url: string };
+    } | null;
   };
 };
 
@@ -271,36 +276,10 @@ export const VariantGroupDetailDocument = {
                       {
                         kind: "Field",
                         name: { kind: "Name", value: "faqImageURL" },
-                        selectionSet: {
-                          kind: "SelectionSet",
-                          selections: [
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "webpURL" },
-                            },
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "pngURL" },
-                            },
-                          ],
-                        },
                       },
                       {
                         kind: "Field",
                         name: { kind: "Name", value: "descriptionImageURL" },
-                        selectionSet: {
-                          kind: "SelectionSet",
-                          selections: [
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "webpURL" },
-                            },
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "pngURL" },
-                            },
-                          ],
-                        },
                       },
                       {
                         kind: "Field",
@@ -318,7 +297,10 @@ export const VariantGroupDetailDocument = {
                     selections: [
                       { kind: "Field", name: { kind: "Name", value: "id" } },
                       { kind: "Field", name: { kind: "Name", value: "title" } },
-                      { kind: "Field", name: { kind: "Name", value: "price" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "unitPrice" },
+                      },
                       {
                         kind: "Field",
                         name: { kind: "Name", value: "contents" },
@@ -411,46 +393,70 @@ export const CreateOrderDocument = {
             selectionSet: {
               kind: "SelectionSet",
               selections: [
-                { kind: "Field", name: { kind: "Name", value: "orderID" } },
-                { kind: "Field", name: { kind: "Name", value: "totalPrice" } },
                 {
                   kind: "Field",
-                  name: { kind: "Name", value: "orderResult" },
+                  name: { kind: "Name", value: "order" },
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
                       {
-                        kind: "InlineFragment",
-                        typeCondition: {
-                          kind: "NamedType",
-                          name: { kind: "Name", value: "paypayOrderResult" },
-                        },
-                        selectionSet: {
-                          kind: "SelectionSet",
-                          selections: [
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "url" },
-                            },
-                          ],
-                        },
+                        kind: "Field",
+                        name: { kind: "Name", value: "orderID" },
                       },
                       {
-                        kind: "InlineFragment",
-                        typeCondition: {
-                          kind: "NamedType",
-                          name: { kind: "Name", value: "creditCardResult" },
-                        },
+                        kind: "Field",
+                        name: { kind: "Name", value: "totalPrice" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "orderResult" },
                         selectionSet: {
                           kind: "SelectionSet",
                           selections: [
                             {
-                              kind: "Field",
-                              name: { kind: "Name", value: "cardOrderID" },
+                              kind: "InlineFragment",
+                              typeCondition: {
+                                kind: "NamedType",
+                                name: {
+                                  kind: "Name",
+                                  value: "paypayOrderResult",
+                                },
+                              },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "url" },
+                                  },
+                                ],
+                              },
                             },
                             {
-                              kind: "Field",
-                              name: { kind: "Name", value: "accessID" },
+                              kind: "InlineFragment",
+                              typeCondition: {
+                                kind: "NamedType",
+                                name: {
+                                  kind: "Name",
+                                  value: "creditCardResult",
+                                },
+                              },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "cardOrderID",
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "accessID" },
+                                  },
+                                ],
+                              },
                             },
                           ],
                         },
