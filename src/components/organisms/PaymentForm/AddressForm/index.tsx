@@ -12,6 +12,7 @@ import { InputWithHyphen } from "components/molecules/FixedDigitInput/InputWithH
 import { TextField } from "components/molecules/TextField";
 import { useEffect } from "react";
 import { Form } from "components/organisms/PaymentForm";
+import { prefectures } from "utils/payment/prefectures";
 
 type Props = {
   setValue: UseFormSetValue<Form>;
@@ -34,8 +35,8 @@ export const AddressForm = (props: Props) => {
       if (res.data.results) {
         const result = res.data.results[0];
         props.setValue("prefecture", result["address1"]);
-        props.setValue("city", result["city"]);
-        props.setValue("streetAddress", result["streetAddress"]);
+        props.setValue("city", result["address2"]);
+        props.setValue("streetAddress", result["address3"]);
       }
     } catch {
       console.log("住所の取得に失敗しました。");
@@ -44,8 +45,6 @@ export const AddressForm = (props: Props) => {
   const setZipCode = async (value: string) => {
     props.setValue("zipCode", value);
   };
-
-  const items = ["アイテム1", "東京都", "アイテム3"];
 
   // プルダウンがチェンジされた時
   const handleChange = (e: any) => {
@@ -56,9 +55,9 @@ export const AddressForm = (props: Props) => {
   const Select = () => {
     return (
       <select {...props.register("prefecture")} onChange={handleChange}>
-        {items.map((item) => (
-          <option key={item} value={item}>
-            {item}
+        {prefectures.map((prefecture) => (
+          <option key={prefecture} value={prefecture}>
+            {prefecture}
           </option>
         ))}
       </select>
@@ -71,6 +70,7 @@ export const AddressForm = (props: Props) => {
           <Typography tag="span">郵便番号*</Typography>
         </Grid>
         <Grid item xs={7}>
+          {/* 一番後ろまでいってから消すときぶっ壊れている */}
           <InputWithHyphen
             length={7}
             onComplete={fillAddress}

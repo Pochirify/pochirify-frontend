@@ -1,4 +1,4 @@
-import { VariantGroupDetailQuery, Product } from "gql/graphql";
+import { VariantGroupDetailQuery, ProductVariant } from "gql/graphql";
 import { Images } from "components/atoms/Images";
 import { Grid } from "@mui/material";
 import styles from "./style.module.scss";

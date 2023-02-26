@@ -33,12 +33,14 @@ const Scripts = () => {
 
 type Props = {
   router: NextRouter;
+  isMobileSite: boolean;
 };
 
 const Template = (props: Props) => {
   // NOTE: router.queryの準備ができるの時間がかかるので、
   // その間はloadingを表示しておく必要がある。
   const [isReady, setIsReady] = useState(false);
+  const [paying, setPaying] = useState(false);
 
   const productID = props.router.query.productID as string | undefined;
   const totalPrice = props.router.query.totalPrice as string | undefined;
@@ -67,16 +69,37 @@ const Template = (props: Props) => {
     CreateOrderMutationVariables
   >(CreateOrderDocument);
 
-  if (!isReady) {
-    return <>loading...</>;
+  if (!isReady || paying) {
+    return (
+      <Image
+        src="/loading.gif"
+        alt="loading"
+        className={styles.loading}
+        width={80}
+        height={80}
+      />
+    );
   }
 
   const totalPriceInt = parseInt(totalPrice as string, 10);
   const quantityInt = parseInt(quantity as string, 10);
+
+  if (props.isMobileSite) {
+    return (
+      <div>
+        <PaymentForm
+          productID={productID as string}
+          totalPrice={totalPriceInt}
+          quantity={quantityInt}
+          setPaying={setPaying}
+          createOrder={createOrder}
+        />
+      </div>
+    );
+  }
+
   return (
-    <div className={styles.module}>
-      {/* <button onClick={() => payWithCard(form)}>button</button> */}
-      {/* TODO: responsiveに対応する。 */}
+    <div>
       <Grid container>
         <Grid item xs={6}>
           {variantImageURLs?.map((url, i) => {
@@ -88,6 +111,7 @@ const Template = (props: Props) => {
             productID={productID as string}
             totalPrice={totalPriceInt}
             quantity={quantityInt}
+            setPaying={setPaying}
             createOrder={createOrder}
           />
         </Grid>

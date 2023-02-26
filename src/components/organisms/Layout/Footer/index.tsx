@@ -13,13 +13,13 @@ type Props = {
   active: boolean;
   totalPrice: number;
   onClick: () => void;
-  selectingPaymentMethod: PaymentMethod;
 };
 
 export const Footer = (props: Props) => {
   const paymentMethodModal = usePaymentMethodModal();
   const { isMobileSite } = useMediaQueryContext();
   const moduleWidth = isMobileSite ? "100%" : "50%";
+  const { selectingPaymentMethod } = usePaymentState();
 
   return (
     <Grid container style={{ width: moduleWidth }} className={styles.module}>
@@ -70,9 +70,7 @@ export const Footer = (props: Props) => {
                       onClick={props.active ? props.onClick : undefined}
                     >
                       <img
-                        src={getPaymentMethodAssetPath(
-                          props.selectingPaymentMethod
-                        )}
+                        src={getPaymentMethodAssetPath(selectingPaymentMethod)}
                         alt=""
                         width="60%"
                         height="80%"

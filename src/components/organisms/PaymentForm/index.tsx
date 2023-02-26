@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { SixDigitInput } from "components/molecules/FixedDigitInput/SixDigitInput";
 import { InputWithHyphen } from "components/molecules/FixedDigitInput/InputWithHyphen";
 import {
@@ -54,6 +54,7 @@ type Props = {
   productID: string;
   totalPrice: number;
   quantity: number;
+  setPaying: (paying: boolean) => void;
   createOrder: (
     options?:
       | MutationFunctionOptions<
@@ -80,6 +81,7 @@ export const PaymentForm = (props: Props) => {
   } = useForm<Form>({
     resolver: paymentFormResolver,
   });
+  // TODO: useFormは一つにまとめられる(resolverでwhen句使う)
   const {
     cardControl,
     cardSetValue,
@@ -132,11 +134,6 @@ export const PaymentForm = (props: Props) => {
   }, [isValid, cardIsValid, selectingPaymentMethod]);
 
   const router = useRouter();
-  const onClick = useCallback(() => {
-    router.push({
-      pathname: "/OrderCompleted",
-    });
-  }, []);
 
   return (
     <div className={styles.module}>
@@ -227,12 +224,10 @@ export const PaymentForm = (props: Props) => {
           />
         </FormContainer>
       </GraphicalShow>
-      <input type="submit" onClick={() => trigger()} />
       <Footer
         totalPrice={props.totalPrice}
         active={active}
-        onClick={onClick}
-        selectingPaymentMethod={selectingPaymentMethod}
+        onClick={() => props.setPaying(true)}
       />
     </div>
   );

@@ -1,9 +1,11 @@
 import Template from "components/templates/PaymentForm";
+import { useMediaQueryContext } from "providers/MediaQueryProvider";
 
 const PaymentForm = () => {
+  const { isMobileSite } = useMediaQueryContext();
   return (
     <>
-      <Template />
+      <Template isMobileSite={isMobileSite} />
     </>
   );
 };

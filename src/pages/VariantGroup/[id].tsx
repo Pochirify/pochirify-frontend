@@ -10,7 +10,7 @@ import {
   VariantGroupDetailDocument,
   VariantGroupDetailQuery,
 } from "../../gql/graphql";
-import { useMediaQueryContext } from "../../providers/MediaQueryProvider";
+import { useMediaQueryContext } from "providers/MediaQueryProvider";
 
 const Page = ({ data }: { data: VariantGroupDetailQuery }) => {
   const { isMobileSite, isPcSite } = useMediaQueryContext();

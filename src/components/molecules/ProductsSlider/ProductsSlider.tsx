@@ -1,11 +1,12 @@
 import React from "react";
 import { Stack } from "@mui/material";
-import { Product } from "../../../gql/graphql";
+import { ProductVariant } from "../../../gql/graphql";
 import { VariantProduct } from "../../atoms/VariantProduct/VariantProduct";
 import styles from "./styles.module.scss";
 
+// TODO: ドメインが入ってるから、organismにおくべきそう
 type Props = {
-  variantProducts: Array<Product>;
+  variantProducts: Array<ProductVariant>;
   onProductClick(hoveringProductIndex: number): void;
 };
 
