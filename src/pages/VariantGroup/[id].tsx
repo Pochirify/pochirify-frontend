@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useRouter } from "next/router";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import MobileTemplate from "components/templates/VariantGroup/MobileTemplate";

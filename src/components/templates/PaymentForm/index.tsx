@@ -65,11 +65,27 @@ const Template = (props: Props) => {
   }, [props.router.isReady]);
 
   // TODO: createOrderを投げて、結果を見てpaypayへ移動する。
-  const [createOrder, { data, loading, error }] = useMutation<
+  const [createOrder, { data, error }] = useMutation<
     CreateOrderMutation,
     CreateOrderMutationVariables
   >(CreateOrderDocument);
 
+  useEffect(() => {
+    console.log(data);
+    if (
+      data &&
+      data.createOrder &&
+      data.createOrder.order &&
+      data.createOrder.order.orderResult
+    ) {
+      // TODO: error handle
+      if (
+        data.createOrder.order.orderResult.__typename == "paypayOrderResult"
+      ) {
+        props.router.push(data.createOrder.order.orderResult.url);
+      }
+    }
+  }, [data, error]);
   if (!isReady || paying) {
     return (
       <Image
@@ -82,6 +98,7 @@ const Template = (props: Props) => {
     );
   }
 
+  const productIDInt = parseInt(productID as string, 10);
   const totalPriceInt = parseInt(totalPrice as string, 10);
   const quantityInt = parseInt(quantity as string, 10);
 
@@ -89,7 +106,7 @@ const Template = (props: Props) => {
     return (
       <div>
         <PaymentForm
-          productID={productID as string}
+          productID={productIDInt}
           totalPrice={totalPriceInt}
           quantity={quantityInt}
           setPaying={setPaying}
@@ -109,7 +126,7 @@ const Template = (props: Props) => {
         </Grid>
         <Grid item xs={6}>
           <PaymentForm
-            productID={productID as string}
+            productID={productIDInt}
             totalPrice={totalPriceInt}
             quantity={quantityInt}
             setPaying={setPaying}

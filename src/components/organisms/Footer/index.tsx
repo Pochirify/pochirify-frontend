@@ -3,7 +3,7 @@ import { Typography } from "components/atoms/Typography";
 import { usePaymentState } from "providers/PaymentStateProvider";
 import styles from "./style.module.scss";
 import { Grid } from "@material-ui/core";
-import { getPaymentMethodAssetPath } from "utils/payment/paymentMethodAssets";
+import { getPaymentMethodAssetPath } from "utils/payment/paymentMethod";
 import { usePaymentMethodModal } from "components/organisms/PaymentMethodModal/usePaymentMethodModal";
 import { useMediaQueryContext } from "providers/MediaQueryProvider";
 import { Box } from "@mui/system";

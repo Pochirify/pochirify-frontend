@@ -27,6 +27,7 @@ import {
 import { CreateOrderMutation, CreateOrderInput, Exact } from "gql/graphql";
 import { Footer } from "components/organisms/Footer";
 import { useRouter } from "next/router";
+import { getGqlPaymentMethod } from "utils/payment/paymentMethod";
 
 export type Form = {
   phoneNumber: string;
@@ -51,7 +52,7 @@ export type Form = {
 // };
 
 type Props = {
-  productID: string;
+  productID: number;
   totalPrice: number;
   quantity: number;
   setPaying: (paying: boolean) => void;
@@ -97,23 +98,6 @@ export const PaymentForm = (props: Props) => {
     selectingPaymentMethod === "card"
   );
 
-  // props.createOrder({
-  //   variables: {
-  //     input: {
-  //       productID: "",
-  //       quantity: 0,
-  //       paymentMethod: PaymentMethod.Card,
-  //       phoneNumber: "",
-  //       emailAddress: "",
-  //       zipCode: 3424,
-  //       prefecture: "",
-  //       city: "",
-  //       streetAddress: "",
-  //       lastName: "",
-  //       firstName: "",
-  //     },
-  //   },
-  // }).catch((e) => {});
   useEffect(() => {
     setShowCardForm(selectingPaymentMethod === "card");
   }, [selectingPaymentMethod]);
@@ -133,7 +117,32 @@ export const PaymentForm = (props: Props) => {
     setActive(active);
   }, [isValid, cardIsValid, selectingPaymentMethod]);
 
-  const router = useRouter();
+  const onClick = useCallback(() => {
+    props.setPaying(true);
+
+    trigger();
+    const building = getValues("building");
+    props.createOrder({
+      variables: {
+        input: {
+          productVariantID: props.productID,
+          quantity: props.quantity,
+          paymentMethod: getGqlPaymentMethod(selectingPaymentMethod),
+          redirectURL:
+            (process.env.NEXT_PUBLIC_BASE_URL as string) + "/OrderCompleted",
+          phoneNumber: getValues("phoneNumber"),
+          emailAddress: getValues("email"),
+          zipCode: parseInt(getValues("zipCode"), 10),
+          prefecture: getValues("prefecture"),
+          city: getValues("city"),
+          streetAddress: getValues("streetAddress"),
+          building: building,
+          lastName: getValues("lastName"),
+          firstName: getValues("firstName"),
+        },
+      },
+    });
+  }, [props.productID, props.quantity, selectingPaymentMethod]);
 
   return (
     <div className={styles.module}>
@@ -224,11 +233,25 @@ export const PaymentForm = (props: Props) => {
           />
         </FormContainer>
       </GraphicalShow>
-      <Footer
-        totalPrice={props.totalPrice}
-        active={active}
-        onClick={() => props.setPaying(true)}
-      />
+      <Footer totalPrice={props.totalPrice} active={active} onClick={onClick} />
     </div>
   );
 };
+
+// props.createOrder({
+//   variables: {
+//     input: {
+//       productID: "",
+//       quantity: 0,
+//       paymentMethod: PaymentMethod.Card,
+//       phoneNumber: "",
+//       emailAddress: "",
+//       zipCode: 3424,
+//       prefecture: "",
+//       city: "",
+//       streetAddress: "",
+//       lastName: "",
+//       firstName: "",
+//     },
+//   },
+// }).catch((e) => {});

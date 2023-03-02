@@ -8,7 +8,7 @@ import {
 import {
   getPaymentMethodsExcept,
   getPaymentMethodAssetPath,
-} from "utils/payment/paymentMethodAssets";
+} from "utils/payment/paymentMethod";
 import { Grid } from "@mui/material";
 import { PaymentMethod } from "types";
 
