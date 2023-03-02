@@ -14,10 +14,10 @@ export const FormContainer = (props: Props) => {
     <>
       <Grid container>
         <Grid item xs={2}>
-          <Image src={props.iconImageURL} width={40} height={40} alt="" />
+          <Image src={props.iconImageURL} width={30} height={25} alt="" />
         </Grid>
         <Grid item xs={10}>
-          <Typography>{props.title}</Typography>
+          <Typography size="16">{props.title}</Typography>
         </Grid>
       </Grid>
       <div>{props.children}</div>
