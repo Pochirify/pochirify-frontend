@@ -1,6 +1,7 @@
 .module {
   display: flex;
   align-items: center;
+  justify-content: center;
 
   // 上限のspinなくす
   // https://hirooooo-lab.com/development/html5-input-type-number-customize/
@@ -14,10 +15,10 @@
   }
 
   input {
-    width: 25px;
+    width: 30px;
     text-align: center;
     border-radius: 7px;
-    height: 35px;
+    height: 40px;
     border: 0.1em solid;
     background-color: lavender;
   }
