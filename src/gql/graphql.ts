@@ -107,7 +107,6 @@ export type CreateOrderInput = {
   quantity: Scalars["Int"];
   redirectURL?: InputMaybe<Scalars["String"]>;
   streetAddress: Scalars["String"];
-  unitPrice: Scalars["Int"];
   zipCode: Scalars["Int"];
 };
 
