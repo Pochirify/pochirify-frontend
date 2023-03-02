@@ -129,7 +129,7 @@ export const PaymentForm = (props: Props) => {
           quantity: props.quantity,
           paymentMethod: getGqlPaymentMethod(selectingPaymentMethod),
           redirectURL:
-            (process.env.NEXT_PUBLIC_BASE_URL as string) + "/OrderCompleted",
+            (process.env.NEXT_PUBLIC_BASE_PATH as string) + "/OrderCompleted",
           phoneNumber: getValues("phoneNumber"),
           emailAddress: getValues("email"),
           zipCode: parseInt(getValues("zipCode"), 10),

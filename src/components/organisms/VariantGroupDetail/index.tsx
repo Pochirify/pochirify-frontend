@@ -25,7 +25,7 @@ type Props = {
 export default function VariantGroupDetail({ data, isMobile }: Props) {
   const [touchedIndex, setTouchedIndex] = useState(0);
   const [selectingCounts, setSelectingCounts] = useState<number[]>(
-    data.variantGroupDetail.variants.map(() => 0)
+    data.variantGroupDetail.variants.map(() => 1)
   );
 
   const totalPrice =

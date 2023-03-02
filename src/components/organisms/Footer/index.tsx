@@ -72,12 +72,9 @@ export const Footer = (props: Props) => {
                       <img
                         src={getPaymentMethodAssetPath(selectingPaymentMethod)}
                         alt=""
-                        width="60%"
-                        height="80%"
+                        width="100%"
+                        height={80}
                       />
-                      <Typography tag="span" size="10">
-                        でお支払い
-                      </Typography>
                     </a>
                   </Grid>
                   <Grid item xs={2}>

@@ -58,14 +58,9 @@ const Template = (props: Props) => {
         <Typography size="10" bold>
           ご注文内容と配送状況については注文完了メールまたは発送通知メールにてご確認ください。
         </Typography>
-        <Grid container>
-          <Grid item xs={6}>
-            <Typography size="10" bold>
-              ご注文内容と配送状況については注文完了メールまたは発送通知メールにてご確認ください。
-            </Typography>
-          </Grid>
-          <Grid item xs={6}>お届け</Grid>
-        </Grid>
+        <Typography size="10" bold>
+          ご注文内容と配送状況については注文完了メールまたは発送通知メールにてご確認ください。
+        </Typography>
       </div>
     </div>
   );
