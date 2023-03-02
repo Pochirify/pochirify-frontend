@@ -233,7 +233,7 @@ export const PaymentForm = (props: Props) => {
           />
         </FormContainer>
       </GraphicalShow>
-      <span style={{ height: 250 }}></span>
+      <span style={{ height: 400 }}></span>
       <Footer totalPrice={props.totalPrice} active={active} onClick={onClick} />
     </div>
   );
